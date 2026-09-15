@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import Navbar from './components/layout/Navbar.vue'
 import CatalogView from './views/CatalogView.vue'
 
+
 const cart = ref([])
 
 const cartCount = computed(() =>

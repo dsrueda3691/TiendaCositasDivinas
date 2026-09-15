@@ -1,13 +1,13 @@
 :root {
-  --accent: #59624f;
-  --accent-strong: #424b3c;
-  --canvas: #f4f1eb;
-  --ink: #302f2b;
-  --line: #d9d5ca;
-  --muted: #716f67;
-  --soft-accent: #e6e9e1;
-  --surface: #f5f3ee;
-  font-family: Inter, system-ui, sans-serif;
+  --accent: #b58a3a;
+  --accent-strong: #4a3428;
+  --canvas: #f8f4ea;
+  --ink: #292725;
+  --line: #dcceb5;
+  --muted: #756b61;
+  --soft-accent: #e6eadf;
+  --surface: #fffdf8;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   color: var(--ink);
   background: var(--canvas);
 }

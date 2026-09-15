@@ -9,8 +9,13 @@
    
     <section id="proposito" class="mission-banner" aria-label="Propósito de evangelización">
       <div class="mission-banner__inner">
-        <div class="mission-banner__icon-col">
-          <div class="mission-banner__badge-icon" aria-hidden="true">✝</div>
+        <div class="mission-banner__image-wrap">
+          <img
+            :src="missionImage"
+            alt="Biblia y rosario en un ambiente de oración"
+            class="mission-banner__image"
+          />
+          <span class="mission-banner__image-caption">Detalles con propósito</span>
         </div>
         <div class="mission-banner__content">
           <span class="mission-banner__tag">Propósito de Evangelización</span>
@@ -159,6 +164,7 @@ import CatalogFilters from '../components/catalog/CatalogFilters.vue'
 import ProductGrid from '../components/catalog/ProductGrid.vue'
 import { categories } from '../data/categories'
 import { products } from '../data/products'
+import missionImage from '../assets/banner.jpeg'
 
 const emit = defineEmits(['add-to-cart', 'set-cart-quantity'])
 
@@ -304,6 +310,7 @@ onBeforeUnmount(() => {
 }
 
 .catalog-view h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.6rem, 5vw, 3.2rem);
   line-height: 1.15;
   margin: .3rem 0 .6rem;
@@ -319,20 +326,57 @@ onBeforeUnmount(() => {
 /* ── Mission Banner (Propósito Emaús Mujeres) ────────── */
 .mission-banner {
   animation: intro-enter .5s cubic-bezier(0.16, 1, 0.3, 1) .08s both;
-  background: linear-gradient(135deg, #ffffff 0%, var(--soft-accent) 100%);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-left: 5px solid var(--accent);
-  border-radius: 1.15rem;
-  box-shadow: 0 4px 20px rgba(138, 93, 73, .08);
+  border-left: 5px solid var(--olive);
+  border-radius: 1rem;
+  box-shadow: 0 12px 30px rgba(74, 52, 40, .12);
   margin-bottom: 2rem;
   overflow: hidden;
-  padding: 1.35rem 1.5rem;
+  padding: 0;
 }
 
 .mission-banner__inner {
-  display: flex;
-  gap: 1.25rem;
-  align-items: flex-start;
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(18rem, 1.05fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.mission-banner__image-wrap {
+  min-height: 21rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.mission-banner__image-wrap::after {
+  background: linear-gradient(180deg, transparent 55%, rgba(41, 39, 37, .55) 100%);
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.mission-banner__image {
+  border-radius: 0;
+  display: block;
+  height: 100%;
+  min-height: 21rem;
+  object-fit: cover;
+  width: 100%;
+}
+
+.mission-banner__image-caption {
+  background: rgba(41, 39, 37, .84);
+  border-radius: 0 .45rem 0 .45rem;
+  bottom: 0;
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 700;
+  left: 0;
+  padding: .4rem .55rem;
+  position: absolute;
+  z-index: 1;
 }
 
 .mission-banner__icon-col {
@@ -358,6 +402,21 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: .55rem;
+  justify-content: center;
+  padding: 2.25rem 2.5rem;
+  position: relative;
+}
+
+.mission-banner__content::before {
+  color: var(--accent);
+  content: '✦';
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  left: 1.1rem;
+  line-height: 1;
+  opacity: .7;
+  position: absolute;
+  top: 1.15rem;
 }
 
 .mission-banner__tag {
@@ -368,16 +427,30 @@ onBeforeUnmount(() => {
   font-size: .68rem;
   font-weight: 800;
   letter-spacing: .06em;
-  padding: .2rem .65rem;
+  box-shadow: 0 4px 10px rgba(181, 138, 58, .2);
+  padding: .3rem .75rem;
   text-transform: uppercase;
 }
 
 .mission-banner__quote {
+  font-family: 'Cormorant Garamond', Georgia, serif;
   color: var(--ink);
-  font-size: 1rem;
+  font-size: 1.35rem;
   font-weight: 600;
   line-height: 1.45;
   margin: 0;
+  max-width: 34rem;
+  position: relative;
+}
+
+.mission-banner__quote::after {
+  background: var(--accent);
+  content: '';
+  display: block;
+  height: 2px;
+  margin-top: 1rem;
+  opacity: .45;
+  width: 3rem;
 }
 
 .mission-banner__cause {
@@ -385,6 +458,7 @@ onBeforeUnmount(() => {
   font-size: .95rem;
   line-height: 1.55;
   margin: 0;
+  max-width: 38rem;
 }
 
 .mission-banner__cause strong {
@@ -398,6 +472,8 @@ onBeforeUnmount(() => {
   font-weight: 800;
   margin: .2rem 0 0;
   font-style: italic;
+  border-left: 2px solid var(--accent);
+  padding-left: .75rem;
 }
 
 /* ── Deployed Drawer Section ────────────────────────── */
@@ -733,8 +809,20 @@ onBeforeUnmount(() => {
   }
 
   .mission-banner__inner {
+    align-items: stretch;
+    grid-template-columns: 1fr;
     gap: .75rem;
   }
+
+  .mission-banner__image-wrap {
+    flex-basis: auto;
+    min-height: 13.5rem;
+  }
+
+  .mission-banner__image { min-height: 13.5rem; }
+
+  .mission-banner__content { padding: 1.25rem 1rem 1.4rem; }
+  .mission-banner__quote { font-size: 1.15rem; }
 
   .mission-banner__badge-icon {
     height: 2.35rem;

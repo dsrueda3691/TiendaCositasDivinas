@@ -120,7 +120,8 @@ function handleClick(category) {
 }
 
 .category-drawers__title {
-  font-size: 1.35rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.7rem;
   font-weight: 800;
   line-height: 1.2;
   margin: .2rem 0;
@@ -188,9 +189,9 @@ function handleClick(category) {
 
 /* Estado activo / abierto */
 .category-drawer-card--active {
-  background: #fff;
+  background: var(--surface);
   border-color: var(--accent) !important;
-  box-shadow: 0 8px 24px rgba(138, 93, 73, .22);
+  box-shadow: 0 8px 24px rgba(74, 52, 40, .2);
 }
 
 .category-drawer-card--active .category-drawer-card__footer {
@@ -207,7 +208,7 @@ function handleClick(category) {
 /* ── Image & Badges ─────────────────────────────────── */
 .category-drawer-card__image-container {
   aspect-ratio: 16 / 10;
-  background: #e7e2db;
+  background: var(--beige);
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -258,11 +259,15 @@ function handleClick(category) {
 }
 
 .category-drawer-card__info {
+  background: #eee5d5;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-strong) 14%, transparent);
+  min-height: 6rem;
   padding: .85rem 1rem .65rem;
 }
 
 .category-drawer-card__name {
   color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.25;
@@ -353,6 +358,7 @@ function handleClick(category) {
   }
 
   .category-drawer-card__info {
+    min-height: 4.25rem;
     padding: .65rem .65rem .45rem;
   }
 

@@ -1,13 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --accent: #8a5d49;
-  --accent-strong: #684536;
-  --canvas: #f5f3f0;
-  --ink: #2c2a28;
-  --line: #e2ded7;
-  --muted: #746f69;
-  --soft-accent: #f1e6df;
-  --surface: #ffffff;
-  font-family: Inter, system-ui, sans-serif;
+  --accent: #b58a3a;
+  --accent-strong: #4a3428;
+  --canvas: #f8f4ea;
+  --ink: #292725;
+  --line: #dcceb5;
+  --muted: #756b61;
+  --soft-accent: #e6eadf;
+  --surface: #fffdf8;
+  --olive: #66704a;
+  --beige: #dcceb5;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   color: var(--ink);
   background: var(--canvas);
 }

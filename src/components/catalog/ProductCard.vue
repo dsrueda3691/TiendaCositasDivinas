@@ -244,7 +244,7 @@ const formatPrice = (price) =>
   background: var(--surface);
   border-radius: 1rem;
   border: 1px solid var(--line);
-  box-shadow: 0 4px 16px rgba(48, 47, 43, .05);
+  box-shadow: 0 5px 18px rgba(74, 52, 40, .08);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -266,7 +266,7 @@ const formatPrice = (price) =>
 
 @media (hover: hover) {
   .product-card:hover {
-    box-shadow: 0 12px 28px rgba(48, 47, 43, .12);
+    box-shadow: 0 14px 30px rgba(74, 52, 40, .16);
     transform: translateY(-4px);
     border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   }
@@ -309,7 +309,9 @@ const formatPrice = (price) =>
 }
 
 .product-card__content h2 {
-  font-size: 1.05rem;
+  color: var(--accent-strong);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: .4rem 0;
   line-height: 1.3;
@@ -341,7 +343,7 @@ const formatPrice = (price) =>
 }
 
 .product-card__availability {
-  background: var(--soft-accent);
+  background: color-mix(in srgb, var(--olive) 16%, var(--surface));
   border-radius: 999px;
   color: var(--accent-strong);
   font-size: .68rem;
@@ -387,7 +389,7 @@ const formatPrice = (price) =>
   background: var(--accent-strong);
   border: 1px solid var(--accent-strong);
   border-radius: .55rem;
-  box-shadow: 0 5px 12px rgba(138, 93, 73, .2);
+  box-shadow: 0 5px 12px rgba(74, 52, 40, .2);
   color: #fff;
   cursor: pointer;
   display: inline-flex;
@@ -406,7 +408,7 @@ const formatPrice = (price) =>
 .product-card__cart-button:hover,
 .details-panel__cart-button:hover {
   background: var(--accent);
-  box-shadow: 0 7px 16px rgba(138, 93, 73, .28);
+  box-shadow: 0 7px 16px rgba(74, 52, 40, .28);
   transform: translateY(-1px);
 }
 
@@ -511,7 +513,7 @@ const formatPrice = (price) =>
 .details-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(44, 42, 40, .5);
+  background: rgba(41, 39, 37, .58);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
@@ -522,7 +524,8 @@ const formatPrice = (price) =>
 
 .details-panel {
   background: var(--surface);
-  box-shadow: -10px 0 35px rgba(44, 42, 40, .2);
+  border-left: 1px solid var(--line);
+  box-shadow: -14px 0 40px rgba(74, 52, 40, .2);
   max-width: 28rem;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -558,12 +561,18 @@ const formatPrice = (price) =>
   transition: background-color .2s ease, transform .15s ease;
 }
 
+.details-panel__close:hover {
+  background: var(--soft-accent);
+  color: var(--accent-strong);
+}
+
 .details-panel__close:active {
   transform: scale(.9);
 }
 
 .details-panel__image-wrap {
   border-radius: .85rem;
+  border: 1px solid var(--line);
   overflow: hidden;
   background: var(--canvas);
 }
@@ -584,7 +593,10 @@ const formatPrice = (price) =>
 }
 
 .details-panel__content h2 {
+  color: var(--accent-strong);
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.5rem;
+  font-weight: 700;
   line-height: 1.25;
   margin: .25rem 0;
 }
@@ -619,12 +631,14 @@ const formatPrice = (price) =>
 
 .details-panel__note {
   background: var(--soft-accent);
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--olive);
   border-radius: 0 .5rem .5rem 0;
   font-size: .88rem;
   padding: .75rem;
   color: var(--ink) !important;
 }
+
+.details-panel__facts dt { color: var(--olive); }
 
 /* ── Ultra Smooth Transition (Desktop & Mobile) ─────── */
 .details-sheet-enter-active,
@@ -668,7 +682,8 @@ const formatPrice = (price) =>
 
   .details-panel {
     border-radius: 1.5rem 1.5rem 0 0;
-    box-shadow: 0 -8px 32px rgba(44, 42, 40, .22);
+    border-left: 0;
+    box-shadow: 0 -10px 34px rgba(74, 52, 40, .24);
     max-height: 90vh;
     max-width: 100%;
     width: 100%;

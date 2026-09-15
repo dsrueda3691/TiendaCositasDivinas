@@ -1,5 +1,10 @@
 <template>
-  <article class="product-card" @click="openDetails">
+  <article
+    ref="cardElement"
+    class="product-card"
+    :class="{ 'product-card--revealed': isCardVisible }"
+    @click="openDetails"
+  >
     <div class="product-card__image-container">
       <img
         :src="product.imagen"
@@ -24,8 +29,35 @@
           aria-label="Ver detalles del producto"
           @click.stop="openDetails"
         >
-          Detalles <span aria-hidden="true">→</span>
+          Detalles <span aria-hidden="true"></span>
         </button>
+        <Transition name="quantity-control" mode="out-in">
+          <button
+            v-if="selectedQuantity === 0"
+            key="add"
+            class="product-card__cart-button"
+            type="button"
+            aria-label="Agregar producto al carrito"
+            @click.stop="addToCart"
+          >
+            <span aria-hidden="true">+</span> Agregar
+          </button>
+          <div v-else key="quantity" class="product-card__quantity" @click.stop>
+            <button type="button" aria-label="Disminuir cantidad" @click="decreaseQuantity">
+              −
+            </button>
+            <input
+              :value="selectedQuantity"
+              type="number"
+              min="1"
+              readonly
+              aria-label="Cantidad seleccionada"
+            />
+            <button type="button" aria-label="Aumentar cantidad" @click="increaseQuantity">
+              +
+            </button>
+          </div>
+        </Transition>
       </div>
     </div>
   </article>
@@ -80,6 +112,35 @@
             <p class="details-panel__note">
               Consulta disponibilidad y pedidos directamente con la Parroquia de la Santa Cruz.
             </p>
+            <Transition name="quantity-control" mode="out-in">
+              <button
+                v-if="selectedQuantity === 0"
+                key="details-add"
+                class="details-panel__cart-button"
+                type="button"
+                @click="addToCart(false)"
+              >
+                <span aria-hidden="true">+</span> Agregar al carrito
+              </button>
+              <div v-else key="details-quantity" class="details-panel__quantity" aria-label="Cantidad seleccionada">
+                <span class="details-panel__quantity-label">Cantidad</span>
+                <div class="product-card__quantity">
+                  <button type="button" aria-label="Disminuir cantidad" @click="decreaseQuantity">
+                    −
+                  </button>
+                  <input
+                    :value="selectedQuantity"
+                    type="number"
+                    min="1"
+                    readonly
+                    aria-label="Cantidad seleccionada"
+                  />
+                  <button type="button" aria-label="Aumentar cantidad" @click="increaseQuantity">
+                    +
+                  </button>
+                </div>
+              </div>
+            </Transition>
           </div>
         </aside>
       </div>
@@ -88,13 +149,19 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-defineProps({
+const props = defineProps({
   product: { type: Object, required: true },
 })
 
+const emit = defineEmits(['add-to-cart', 'set-cart-quantity'])
+
 const isDetailsOpen = ref(false)
+const selectedQuantity = ref(0)
+const cardElement = ref(null)
+const isCardVisible = ref(true)
+let cardObserver
 
 function openDetails() {
   isDetailsOpen.value = true
@@ -103,6 +170,51 @@ function openDetails() {
 function closeDetails() {
   isDetailsOpen.value = false
 }
+
+function addToCart(closePanel = true) {
+  selectedQuantity.value = 1
+  emit('add-to-cart', props.product)
+  if (closePanel) closeDetails()
+}
+
+function increaseQuantity() {
+  selectedQuantity.value += 1
+  emitQuantity()
+}
+
+function decreaseQuantity() {
+  selectedQuantity.value -= 1
+
+  if (selectedQuantity.value <= 0) {
+    selectedQuantity.value = 0
+    emit('set-cart-quantity', { product: props.product, quantity: 0 })
+    return
+  }
+
+  emitQuantity()
+}
+
+function emitQuantity() {
+  emit('set-cart-quantity', {
+    product: props.product,
+    quantity: selectedQuantity.value,
+  })
+}
+
+onMounted(() => {
+  if (!('IntersectionObserver' in window) || !cardElement.value) return
+
+  isCardVisible.value = false
+  cardObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return
+      isCardVisible.value = true
+      cardObserver?.disconnect()
+    },
+    { threshold: 0.08, rootMargin: '0px 0px -6% 0px' },
+  )
+  cardObserver.observe(cardElement.value)
+})
 
 // Lock scroll without screen jumps
 watch(isDetailsOpen, (isOpen) => {
@@ -114,6 +226,7 @@ watch(isDetailsOpen, (isOpen) => {
 })
 
 onBeforeUnmount(() => {
+  cardObserver?.disconnect()
   document.body.style.overflow = ''
 })
 
@@ -137,10 +250,18 @@ const formatPrice = (price) =>
   height: 100%;
   overflow: hidden;
   cursor: pointer;
-  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1),
+  user-select: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform .55s cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow .25s cubic-bezier(0.16, 1, 0.3, 1),
               border-color .2s ease;
-  user-select: none;
+}
+
+.product-card--revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (hover: hover) {
@@ -235,10 +356,16 @@ const formatPrice = (price) =>
   justify-content: space-between;
   margin-top: auto;
   padding-top: .4rem;
+  flex-wrap: wrap;
 }
+
+.product-card__footer > strong { flex: 1 0 100%; }
+.product-card__details-button,
+.product-card__cart-button { flex: 1 1 auto; min-width: 0; }
 
 .product-card__details-button {
   align-items: center;
+  text-align: center;
   background: transparent;
   border: 1px solid var(--accent);
   border-radius: .5rem;
@@ -252,6 +379,119 @@ const formatPrice = (price) =>
   min-height: 2.5rem;
   padding: .45rem .75rem;
   transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.product-card__cart-button,
+.details-panel__cart-button {
+  align-items: center;
+  background: var(--accent-strong);
+  border: 1px solid var(--accent-strong);
+  border-radius: .55rem;
+  box-shadow: 0 5px 12px rgba(138, 93, 73, .2);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 800;
+  gap: .25rem;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: .45rem .75rem;
+  transition: background-color .2s ease, box-shadow .2s ease, transform .15s ease;
+}
+
+.product-card__cart-button span { font-size: 1.15rem; line-height: 1; }
+
+.product-card__cart-button:hover,
+.details-panel__cart-button:hover {
+  background: var(--accent);
+  box-shadow: 0 7px 16px rgba(138, 93, 73, .28);
+  transform: translateY(-1px);
+}
+
+.product-card__cart-button:active,
+.details-panel__cart-button:active { transform: scale(.96); }
+
+.quantity-control-enter-active,
+.quantity-control-leave-active {
+  transition: opacity .18s ease, transform .18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.quantity-control-enter-from,
+.quantity-control-leave-to {
+  opacity: 0;
+  transform: scale(.92);
+}
+
+.product-card__quantity {
+  align-items: center;
+  background: var(--soft-accent);
+  border: 1px solid var(--accent);
+  border-radius: .55rem;
+  display: inline-flex;
+  min-height: 2.5rem;
+  flex: 0 0 6rem;
+  min-width: 6rem;
+  overflow: hidden;
+}
+
+.product-card__quantity button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--accent-strong);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.25rem;
+  font-weight: 800;
+  height: 2.5rem;
+  justify-content: center;
+  flex: 0 0 2rem;
+  flex-shrink: 0;
+  transition: background-color .2s ease, color .2s ease;
+  width: 2rem;
+}
+
+.product-card__quantity button:hover { background: var(--accent); color: #fff; }
+
+.product-card__quantity input {
+  background: transparent;
+  border: 0;
+  color: var(--accent-strong);
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 800;
+  flex: 0 0 1.7rem;
+  text-align: center;
+  width: 1.7rem;
+}
+
+.product-card__quantity input:focus { outline: none; }
+
+.details-panel__cart-button { align-self: flex-start; margin-top: .4rem; }
+.details-panel__cart-button span { font-size: 1.15rem; line-height: 1; }
+
+.details-panel__quantity {
+  align-items: center;
+  display: flex;
+  gap: .75rem;
+  margin-top: .4rem;
+}
+
+.details-panel__quantity-label {
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.details-panel__quantity .product-card__quantity {
+  flex: 0 0 auto;
+}
+
+@keyframes details-image-enter {
+  from { opacity: 0; transform: scale(.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .product-card__details-button:active {
@@ -333,6 +573,7 @@ const formatPrice = (price) =>
   height: 16rem;
   object-fit: cover;
   width: 100%;
+  animation: details-image-enter .45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .details-panel__content {
@@ -473,6 +714,16 @@ const formatPrice = (price) =>
     padding: .4rem .65rem;
     min-height: 2.25rem;
   }
+
+  .product-card__cart-button,
+  .product-card__quantity,
+  .product-card__quantity button {
+    min-height: 2.25rem;
+  }
+
+  .product-card__cart-button { font-size: .74rem; padding: .35rem .55rem; }
+  .product-card__quantity button { flex-basis: 1.8rem; height: 2.25rem; width: 1.8rem; }
+  .product-card__quantity input { flex-basis: 1.35rem; font-size: .8rem; width: 1.35rem; }
 }
 
 /* ── Reduced motion ─────────────────────────────────── */
@@ -480,11 +731,17 @@ const formatPrice = (price) =>
   .product-card,
   .product-card__image,
   .product-card__details-button,
+  .details-panel__image,
+  .quantity-control-enter-active,
+  .quantity-control-leave-active,
   .details-sheet-enter-active,
   .details-sheet-leave-active,
   .details-sheet-enter-active .details-panel,
   .details-sheet-leave-active .details-panel {
     transition: none !important;
+    animation: none !important;
   }
+
+  .product-card { opacity: 1; transform: none; }
 }
 </style>

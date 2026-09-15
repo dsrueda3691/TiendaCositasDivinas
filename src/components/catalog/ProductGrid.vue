@@ -6,6 +6,8 @@
       :product="product"
       class="product-grid__item"
       :style="{ '--product-delay': `${Math.min(index * 28, 220)}ms` }"
+      @add-to-cart="$emit('add-to-cart', $event)"
+      @set-cart-quantity="$emit('set-cart-quantity', $event)"
     />
     <p v-if="!products.length" class="product-grid__empty">No hay productos en esta categoría.</p>
   </div>
@@ -17,6 +19,8 @@ import ProductCard from './ProductCard.vue'
 defineProps({
   products: { type: Array, required: true },
 })
+
+defineEmits(['add-to-cart', 'set-cart-quantity'])
 </script>
 
 <style>

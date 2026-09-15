@@ -11,7 +11,7 @@
 
 ## 📖 Descripción del Proyecto
 
-Este proyecto es el catálogo digital oficial de la **Tienda Cositas Divinas**, perteneciente a la **Parroquia de la Santa Cruz**. Permite a los feligreses y visitantes explorar de manera rápida, fluida e intuitiva una variedad de 60 artículos religiosos, regalos y detalles para el hogar divididos en categorías temáticas.
+Este proyecto es el catálogo digital oficial de la **Tienda Cositas Divinas**, perteneciente a la **Parroquia de la Santa Cruz**. Permite a los feligreses y visitantes explorar de manera rápida, fluida e intuitiva una variedad de 60 artículos religiosos, regalos y detalles para el hogar divididos en cajones de categorías interactivos.
 
 La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la velocidad de carga, la ergonomía táctil en smartphones y transiciones suaves inspiradas en aplicaciones nativas para iOS y Android.
 
@@ -19,9 +19,22 @@ La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la ve
 
 ## ✨ Características Principales
 
+### 🗄️ Categorías en Cajones Tipo Card con Sección Desplegable
+- **Cajones interactivos**: Cada categoría se presenta como una tarjeta o "cajón" visual con:
+  - Fotografía representativa del catálogo.
+  - Etiqueta con el número de productos disponibles.
+  - Título y descripción de la colección.
+  - Botón de acción integrado "Desplegar cajón ▼" (o "Cajón desplegado ▲").
+  - Estado visual activo con borde de acento, sombra cálida e indicador de apertura.
+- **Sección de productos desplegable**: Al tocar cualquier cajón, se abre suavemente la sección `#productos` con:
+  - Banner superior indicando el cajón activo y cantidad de productos.
+  - Selector de ordenamiento dinámico.
+  - Botón para cerrar o contraer el cajón (`Cerrar cajón ✕`).
+  - Desplazamiento automático suave hacia la sección desplegada en dispositivos móviles.
+
 ### 📱 Optimización Mobile-First de Alto Nivel
-- **Barra de navegación fija (*sticky*)**: Con efecto de desenfoque translúcido (*glassmorphism / backdrop-blur*), logo parroquial visible y enlaces con desplazamiento horizontal.
-- **Categorías con scroll horizontal fluido**: Los filtros de categoría no se apilan verticalmente en pantallas pequeñas; se desplazan de lado a lado con barras de desplazamiento ocultas para maximizar el área visible.
+- **Barra de navegación fija (*sticky*)**: Con efecto de desenfoque translúcido (*glassmorphism / backdrop-blur*), logo parroquial visible de 4.2rem y enlaces con desplazamiento horizontal.
+- **Cuadrícula de cajones adaptativa**: 3 columnas en escritorio, 2 en tablet y 2 columnas compactas en móvil para no sobrecargar la pantalla.
 - **Dimensiones táctiles recomendadas (≥ 44px)**: Todos los botones, filtros y selectores cumplen con los estándares de accesibilidad para pulsación cómoda con los dedos.
 - **Prevención de comportamientos indeseados**:
   - Se eliminó el destello azul de toque en móviles (`-webkit-tap-highlight-color: transparent`).
@@ -29,7 +42,8 @@ La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la ve
   - Prevención de desborde y recarga accidental (*pull-to-refresh* con `overscroll-behavior-y: contain`).
 
 ### 🎭 Animaciones y Micro-interacciones
-- **Transición suave de pestañas (*Cross-fade & Slide*)**: Al cambiar de categoría o página, el catálogo actual se desvanece suavemente y los nuevos productos entran sin parpadeos ni choques de maquetación.
+- **Despliegue fluido (*Drawer Expand*)**: Al abrir o cerrar un cajón, la sección se desliza con suavidad hacia abajo/arriba.
+- **Transición suave entre colecciones (*Cross-fade & Slide*)**: Al cambiar de cajón o página, el catálogo actual se desvanece suavemente y los nuevos productos entran sin parpadeos ni choques de maquetación.
 - **Entrada escalonada (*Staggered Entry*)**: Las tarjetas de productos aparecen en cascada progresiva para una sensación visual elegante y dinámica.
 - **Componente de Detalles (Modal & Bottom Sheet)**:
   - **En móviles**: Se despliega desde abajo hacia arriba como un *bottom-sheet* nativo con tirador táctil (*drag handle*), cerrándose con un deslizamiento continuo hacia abajo (sin cortes instantáneos).
@@ -39,12 +53,13 @@ La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la ve
 
 ### 🛍️ Catálogo y Gestión de Productos
 - **60 productos reales catalogados** con sus respectivas imágenes de alta calidad optimizadas en peso.
-- **5 categorías temáticas**:
-  1. `Hogar y Decoración`: Adornos, colgantes de puerta, cruces, placas de pared, delantales y letreros.
-  2. `Pines y Llaveros`: Pines devocionales de metal esmaltado, medallas y llaveros de San Benito.
-  3. `Pastilleros e Imanes`: Pastilleros metálicos de bolsillo e imanes para nevera.
-  4. `Bolsos y Fundas`: Bolsos de tela, tote bags, fundas de almohada y cargadores.
-  5. `Librería y Devoción`: Porta Biblias, pestañas separadoras, marcapáginas y stickers.
+- **6 cajones temáticos**:
+  1. `Todos los Productos`: Colección completa de los 60 artículos de la parroquia.
+  2. `Hogar y Decoración`: Adornos, colgantes de puerta, cruces, placas de pared, delantales y letreros (13 productos).
+  3. `Pines y Llaveros`: Pines devocionales de metal esmaltado, medallas y llaveros de San Benito (16 productos).
+  4. `Pastilleros e Imanes`: Pastilleros metálicos de bolsillo e imanes para nevera (17 productos).
+  5. `Bolsos y Fundas`: Bolsos de tela, tote bags, fundas de almohada y cargadores (6 productos).
+  6. `Librería y Devoción`: Porta Biblias, pestañas separadoras, marcapáginas y stickers (8 productos).
 - **Ordenamiento dinámico**:
   - Recomendados.
   - Precio: Menor a Mayor.
@@ -75,6 +90,7 @@ Catalogo/
 ├── .gitignore                     # Archivos y carpetas ignorados por git
 ├── index.html                     # Entrada HTML con metadatos móviles y prefetch
 ├── package.json                   # Dependencias y scripts de ejecución
+├── README.md                      # Documentación del proyecto
 ├── vite.config.js                 # Configuración de Vite y plugin de Vue
 └── src/
     ├── App.vue                    # Componente raíz (layout general)
@@ -88,15 +104,15 @@ Catalogo/
     │   ├── layout/
     │   │   └── Navbar.vue         # Barra de navegación (sidebar en PC, sticky en móvil)
     │   └── catalog/
-    │       ├── CatalogFilters.vue # Filtros de categorías y selector de orden
-    │       ├── ProductCard.vue    # Tarjeta de producto y modal de detalles
+    │       ├── CatalogFilters.vue # Cajones de categorías tipo card con disparador
+    │       ├── ProductCard.vue    # Tarjeta de producto y modal de detalles (bottom sheet)
     │       ├── ProductGrid.vue    # Cuadrícula responsiva con entrada escalonada
     │       └── SortSelect.vue     # Componente modular de ordenamiento
     ├── data/
-    │   ├── categories.js          # Lista de categorías disponibles
+    │   ├── categories.js          # Metadatos e imágenes de los cajones de categorías
     │   └── products.js            # Base de datos de los 60 productos con imágenes y precios
     └── views/
-        └── CatalogView.vue        # Vista principal que coordina filtros, productos y paginación
+        └── CatalogView.vue        # Vista principal: coordina cajones, sección desplegada y paginación
 ```
 
 ---
@@ -147,17 +163,17 @@ git init
 # 2. Agregar todos los archivos al seguimiento
 git add .
 
-# 3. Crear el primer commit
-git commit -m "feat: catálogo digital mobile-first con 60 productos y animaciones fluidas"
+# 3. Crear el commit
+git commit -m "feat: categorías en cajones tipo card con sección desplegable"
 
 # 4. Cambiar a la rama principal
 git branch -M main
 
-# 5. Conectar con tu repositorio remoto de GitHub (reemplaza con tu URL)
-git remote add origin https://github.com/TU_USUARIO/NOMBRE_DEL_REPO.git
+# 5. Conectar con tu repositorio remoto de GitHub
+git remote add origin https://github.com/dsrueda3691/TiendaCositasDivinas.git
 
-# 6. Subir el proyecto a GitHub
-git push -u origin main
+# 6. Subir el proyecto a GitHub (usa --force si GitHub tenía un README inicial vacío)
+git push -u origin main --force
 ```
 
 ---
@@ -175,4 +191,3 @@ Este proyecto puede desplegarse en segundos en cualquiera de las siguientes plat
 ## 📄 Licencia
 
 Este proyecto fue desarrollado para la **Tienda Cositas Divinas** de la **Parroquia de la Santa Cruz**. Todos los derechos sobre las marcas y fotografías pertenecen a la parroquia. Código abierto bajo licencia [MIT](LICENSE).
-

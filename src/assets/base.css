@@ -1,0 +1,17 @@
+:root {
+  --accent: #59624f;
+  --accent-strong: #424b3c;
+  --canvas: #f4f1eb;
+  --ink: #302f2b;
+  --line: #d9d5ca;
+  --muted: #716f67;
+  --soft-accent: #e6e9e1;
+  --surface: #f5f3ee;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-decoration: none; }

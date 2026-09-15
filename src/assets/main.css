@@ -1,0 +1,50 @@
+:root {
+  --accent: #8a5d49;
+  --accent-strong: #684536;
+  --canvas: #f5f3f0;
+  --ink: #2c2a28;
+  --line: #e2ded7;
+  --muted: #746f69;
+  --soft-accent: #f1e6df;
+  --surface: #ffffff;
+  font-family: Inter, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior-y: contain;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Mobile touch optimizations */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Utility: hide scrollbar for horizontal scroll containers */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Body scroll lock when details panel is open */
+body.details-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}

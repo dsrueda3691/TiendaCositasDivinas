@@ -1,6 +1,7 @@
+
 # Tienda Cositas Divinas
 
-Catálogo digital de la **Parroquia de la Santa Cruz** para consultar artículos religiosos, detalles para el hogar y productos devocionales. La aplicación permite explorar el catálogo, consultar los detalles de cada artículo, preparar una selección de compra y enviarla directamente por WhatsApp.
+Catálogo digital de la **Parroquia de la Santa Cruz** para consultar artículos religiosos, detalles para el hogar y productos devocionales. La aplicación permite explorar el catálogo, consultar los detalles de cada artículo, preparar una selección de compra y enviarla directamente por WhatsApp. Además, cuenta con soporte para **PWA (Progressive Web App)**, permitiendo su instalación en dispositivos móviles y la consulta del catálogo **sin conexión a internet**.
 
 > Los productos vendidos apoyan la recaudación de fondos para la organización del **XII Retiro de Emaús Mujeres**.
 
@@ -32,6 +33,12 @@ El proyecto funciona como un escaparate digital sencillo y accesible para la tie
 - Muestra hasta 24 productos por página en escritorio y hasta 16 en teléfonos pequeños.
 - Carga las imágenes de producto de forma diferida para mejorar el rendimiento.
 
+### Aplicación Web Progresiva (PWA Offline)
+
+- Soporte de instalación nativa en dispositivos iOS y Android ("Agregar a la pantalla de inicio").
+- Registro automático de **Service Worker** con estrategia de almacenamiento en caché para scripts, estilos e imágenes (`EMAUS.jpeg`, `logo.JPG`, `banner.jpeg`).
+- Funcionamiento del catálogo, filtrado, detalles de productos y carrito de compras sin necesidad de conexión a internet.
+
 ### Ordenamiento
 
 Dentro de la categoría desplegada se puede ordenar la lista por:
@@ -43,6 +50,12 @@ Dentro de la categoría desplegada se puede ordenar la lista por:
 - Nombre de Z a A.
 
 Al cambiar de categoría, orden o página, la aplicación regresa a la primera página y desplaza suavemente la vista al comienzo de los resultados.
+
+### Identidad Visual y Destacados
+
+- **Barra de Navegación (Navbar):** Muestra el isotipo de la Parroquia de la Santa Cruz junto al distintivo de Emaús en tamaño ampliado y optimizado para pantallas táctiles.
+- **Banner de Propósito:** Incorpora el sello del XII Retiro de Emaús Mujeres y la foto representativa de devoción.
+- **Pie de página (Footer):** Emblema centralizado de Emaús con microinteracciones al pasar el cursor o presionar.
 
 ### Detalles de productos
 
@@ -90,6 +103,7 @@ La aplicación integra `@vercel/analytics` desde `src/main.js` para habilitar la
 
 - [Vue 3](https://vuejs.org/) con Composition API y componentes `.vue`.
 - [Vite](https://vite.dev/) como servidor de desarrollo y herramienta de compilación.
+- [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) para la generación y gestión del Service Worker offline y manifest PWA.
 - JavaScript con módulos ES.
 - CSS modular por componente y estilos globales.
 - `localStorage` para la persistencia local del carrito.
@@ -100,19 +114,24 @@ La aplicación integra `@vercel/analytics` desde `src/main.js` para habilitar la
 
 ```text
 Catalogo/
-├── index.html                  # Documento HTML, metadatos y CSP del cliente
+├── index.html                  # Documento HTML, metadatos PWA y CSP del cliente
 ├── package.json                # Dependencias y comandos npm
 ├── README.md                   # Documentación del proyecto
 ├── vercel.json                 # Cabeceras de seguridad para Vercel
-├── vite.config.js              # Configuración de Vite y el plugin de Vue
+├── vite.config.js              # Configuración de Vite, plugin de Vue y VitePWA
 ├── public/
-│   └── _headers                # Archivo de referencia para plataformas compatibles
+│   ├── _headers                # Archivo de referencia para plataformas compatibles
+│   ├── pwa-192x192.png         # Icono PWA versión móvil
+│   └── pwa-512x512.png         # Icono PWA versión alta resolución
 └── src/
     ├── App.vue                 # Composición raíz: barra lateral y catálogo
-    ├── main.js                 # Punto de entrada y analítica de Vercel
+    ├── main.js                 # Punto de entrada, registro de PWA y analítica Vercel
     ├── assets/
     │   ├── base.css            # Variables y estilos base
     │   ├── main.css             # Estilos globales de la aplicación
+    │   ├── banner.jpeg          # Imagen del banner de misión
+    │   ├── EMAUS.jpeg           # Logotipo oficial de Emaús
+    │   ├── logo.JPG             # Logo de la Parroquia de la Santa Cruz
     │   └── Productos/           # Imágenes locales del catálogo
     ├── components/
     │   ├── cart/
@@ -123,29 +142,31 @@ Catalogo/
     │   │   ├── ProductGrid.vue     # Cuadrícula responsive
     │   │   └── SortSelect.vue      # Selector reutilizable de ordenamiento
     │   └── layout/
-    │       └── Navbar.vue       # Marca y acceso al carrito
+    │       └── Navbar.vue       # Identidad visual (Parroquia/Emaús) y acceso al carrito
     ├── composables/
     │   └── useCart.js           # Estado, cálculos y persistencia del carrito
     ├── data/
     │   ├── categories.js        # Categorías, textos e imágenes representativas
     │   └── products.js          # Datos de los 60 productos
     └── views/
-        └── CatalogView.vue      # Vista principal, filtros y paginación
+        └── CatalogView.vue      # Vista principal, filtros, banner y paginación
+
 ```
 
 ## Requisitos
 
-- Node.js 18 o una versión posterior.
-- npm 9 o una versión posterior.
-- Un navegador moderno con soporte para módulos ES, `localStorage` e `IntersectionObserver`.
+* Node.js 18 o una versión posterior.
+* npm 9 o una versión posterior.
+* Un navegador moderno con soporte para módulos ES, `localStorage`, `IntersectionObserver` y Service Workers.
 
 ## Instalación y desarrollo local
 
 ```bash
-git clone https://github.com/dsrueda3691/TiendaCositasDivinas.git
+git clone [https://github.com/dsrueda3691/TiendaCositasDivinas.git](https://github.com/dsrueda3691/TiendaCositasDivinas.git)
 cd TiendaCositasDivinas
 npm install
 npm run dev
+
 ```
 
 Vite mostrará la URL local, normalmente `http://localhost:5173`.
@@ -156,18 +177,19 @@ Vite mostrará la URL local, normalmente `http://localhost:5173`.
 | --- | --- |
 | `npm install` | Instala las dependencias del proyecto. |
 | `npm run dev` | Inicia el servidor de desarrollo con recarga automática. |
-| `npm run build` | Genera la compilación optimizada en `dist/`. |
-| `npm run preview` | Sirve localmente la compilación de producción. |
+| `npm run build` | Genera la compilación optimizada en `dist/` (incluye assets de la PWA). |
+| `npm run preview` | Sirve localmente la compilación de producción para probar el modo Offline. |
 
 Antes de publicar cambios, se recomienda ejecutar:
 
 ```bash
 npm run build
+
 ```
 
 ## Despliegue en Vercel
 
-El proyecto ya está desplegado en Vercel en [tienda-cositas-divinas.vercel.app](https://tienda-cositas-divinas.vercel.app/).
+El proyecto ya está desplegado en Vercel en [tienda-cositas-divinas.vercel.app](https://www.google.com/url?sa=E&source=gmail&q=https://tienda-cositas-divinas.vercel.app/).
 
 Para conectar el repositorio o actualizar el proyecto:
 
@@ -179,13 +201,13 @@ Para conectar el repositorio o actualizar el proyecto:
 
 Vercel sirve automáticamente la aplicación por HTTPS. El archivo `vercel.json` añade estas cabeceras a las respuestas:
 
-- `Strict-Transport-Security` para forzar HTTPS en navegadores compatibles.
-- `X-Content-Type-Options: nosniff` para evitar la interpretación incorrecta de tipos MIME.
-- `X-Frame-Options: SAMEORIGIN` para reducir riesgos de clickjacking.
-- `Referrer-Policy: strict-origin-when-cross-origin` para limitar la información enviada en el referente.
-- `Permissions-Policy` para deshabilitar cámara, micrófono, geolocalización y pagos, funciones que la aplicación no utiliza.
+* `Strict-Transport-Security` para forzar HTTPS en navegadores compatibles.
+* `X-Content-Type-Options: nosniff` para evitar la interpretación incorrecta de tipos MIME.
+* `X-Frame-Options: SAMEORIGIN` para reducir riesgos de clickjacking.
+* `Referrer-Policy: strict-origin-when-cross-origin` para limitar la información enviada en el referente.
+* `Permissions-Policy` para deshabilitar cámara, micrófono, geolocalización y pagos, funciones que la aplicación no utiliza.
 
-Además, `index.html` define una política CSP, metadatos responsive y configuración de idioma, tema y descripción.
+Además, `index.html` define una política CSP, metadatos responsive y configuración PWA de idioma, tema y descripción.
 
 ## Cómo actualizar el catálogo
 
@@ -202,13 +224,17 @@ El número de WhatsApp y el texto del pedido se encuentran en `src/composables/u
 
 ## Alcance y limitaciones actuales
 
-- No existe backend, base de datos, autenticación ni panel administrativo.
-- El inventario se define en archivos JavaScript y se publica junto con la aplicación.
-- El carrito se guarda únicamente en el navegador de cada visitante; no se sincroniza entre dispositivos.
-- No hay pago en línea: WhatsApp es el canal para confirmar disponibilidad, precio final, pago y entrega.
-- Los precios mostrados son estimados y deben validarse antes de cerrar la compra.
-- El despliegue es una aplicación estática generada por Vite.
+* No existe backend, base de datos, autenticación ni panel administrativo.
+* El inventario se define en archivos JavaScript y se publica junto con la aplicación.
+* El carrito se guarda únicamente en el navegador de cada visitante; no se sincroniza entre dispositivos.
+* No hay pago en línea: WhatsApp es el canal para confirmar disponibilidad, precio final, pago y entrega.
+* Los precios mostrados son estimados y deben validarse antes de cerrar la compra.
+* El despliegue es una aplicación estática generada por Vite con Service Worker PWA para almacenamiento en caché local.
 
 ## Licencia y contenido
 
-Este repositorio contiene el código, textos e imágenes del catálogo de la Tienda Cositas Divinas y de la Parroquia de la Santa Cruz. Antes de reutilizar o redistribuir fotografías, logotipos, textos o datos de contacto, solicita autorización a sus responsables.
+Este repositorio contiene el código, textos e imágenes del catálogo de la Tienda Cositas Divinas, de la Parroquia de la Santa Cruz y del XII Retiro de Emaús Mujeres. Antes de reutilizar o redistribuir fotografías, logotipos, textos o datos de contacto, solicita autorización a sus responsables.
+
+```
+
+```

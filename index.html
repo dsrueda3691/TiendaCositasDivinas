@@ -3,22 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Catálogo de productos — Tienda Cositas Divinas" />
-    <meta name="theme-color" content="#8a5d49" />
+    <meta name="description" content="Catálogo de productos religiosos en apoyo al XII Retiro de Emaús Mujeres — Tienda Cositas Divinas" />
+    
+    <!-- ── Configuración PWA / Móvil ────────────────────── -->
+    <meta name="theme-color" content="#f8f4ea" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Cositas Divinas" />
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+    <link rel="icon" type="image/png" href="/pwa-192x192.png" />
 
     <!-- ── Políticas de Seguridad y Cifrado ────────────── -->
-    <!-- Forzar siempre HTTPS (SSL/TLS) y prevenir inyecciones XSS -->
     <meta
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests; default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; object-src 'none'; base-uri 'self';"
     />
-    <!-- Prevención de rastreo indebido y protección de cabeceras -->
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <!-- Prevención de ataques MIME-sniffing -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <!-- Restricción de permisos no utilizados en el dispositivo del usuario -->
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()" />
 
     <!-- Preconexión a recursos externos -->
@@ -27,7 +28,7 @@
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-    <title>Catálogo — Cositas Divinas</title>
+    <title>Catálogo — Tienda Cositas Divinas</title>
   </head>
   <body>
     <div id="app"></div>

@@ -138,7 +138,7 @@
         <h3>Ninguna Categoria Seleccionada</h3>
         <p>Toca cualquiera de las tarjetas de arriba para desplegar su catálogo de productos.</p>
         <button class="estado-cajon-cerrado__boton" type="button" @click="alternarCajon">
-          Reabrir cajón desplegado ▾
+          Reabrir Categoria desplegada ▾
         </button>
       </div>
     </Transition>

@@ -1,8 +1,8 @@
 <template>
   <div id="inicio" class="vista-catalogo">
     <header class="vista-catalogo__introduccion">
-      <p class="vista-catalogo__antetitulo">Tienda Cositas Divinas</p>
-      <h1>Detalles que acompañan cada momento</h1>
+      <p class="vista-catalogo__antetitulo">Detalles que acompañan cada momento</p>
+      <h1 class="titulo">Tienda Cositas Divinas</h1>
      <p class="pancarta-mision__cita">
             Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
           </p>
@@ -284,6 +284,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
+
 <style>
 /* ── Diseño del Catálogo (Permite scroll natural en toda la página) ── */
 .vista-catalogo {
@@ -294,6 +295,10 @@ onBeforeUnmount(() => {
   max-width: 1400px;
   padding: 2.5rem clamp(1rem, 4vw, 4rem);
   width: 100%;
+}
+.titulo {
+font-family: cursive;
+
 }
 
 /* ── Encabezado de Introducción ─────────────────────── */

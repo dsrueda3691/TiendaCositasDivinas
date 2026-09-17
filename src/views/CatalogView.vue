@@ -3,35 +3,39 @@
     <header class="vista-catalogo__introduccion">
       <p class="vista-catalogo__antetitulo">Tienda Cositas Divinas</p>
       <h1>Detalles que acompañan cada momento</h1>
-      <p>Explora nuestras categorías organizadas en cajones y descubre una selección especial para el hogar y la devoción.</p>
-    </header>
-
-    
-    <section id="proposito" class="pancarta-mision" aria-label="Propósito de evangelización">
-      <div class="pancarta-mision__interior">
-        <div class="pancarta-mision__contenedor-imagen">
-          <img
-            :src="imagenBanner"
-            alt="Biblia y rosario en un ambiente de oración"
-            class="pancarta-mision__imagen"
-          />
-          <span class="pancarta-mision__pie-imagen">Detalles con propósito</span>
-        </div>
-        <div class="pancarta-mision__contenido">
-          <span class="pancarta-mision__etiqueta">Propósito de Evangelización</span>
-          <p class="pancarta-mision__cita">
+     <p class="pancarta-mision__cita">
             Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
           </p>
-          <p class="pancarta-mision__causa">
-            Al adquirir nuestros productos, no solo llevas contigo un artículo especial, sino que también contribuyes a la recaudación de fondos para la organización del
-            <strong>XII Retiro de Emaus Mujeres</strong>.
-          </p>
-          <p class="pancarta-mision__agradecimiento">
-            ¡Muchas gracias por hacer parte de este propósito de evangelización!
-          </p>
-        </div>
+    </header>
+
+    <section id="proposito" class="pancarta-mision" aria-label="Propósito de evangelización">
+  <div class="pancarta-mision__interior">
+    <div class="pancarta-mision__contenedor-imagen">
+      <img
+        :src="imagenBanner"
+        alt="Biblia y rosario en un ambiente de oración"
+        class="pancarta-mision__imagen"
+      />
+      <span class="pancarta-mision__pie-imagen">Detalles con propósito</span>
+    </div>
+    
+    <div class="pancarta-mision__contenido">
+      <div class="pancarta-mision__encabezado-causa">
+        <span class="pancarta-mision__etiqueta">Propósito de Evangelización</span>
+        <!-- Logo de Emaús integrado en el banner -->
+        <img :src="imagenEmaus" alt="Emblema Retiro de Emaús" class="pancarta-mision__logo-emaus" />
       </div>
-    </section>
+      
+      <p class="pancarta-mision__causa">
+        Al adquirir nuestros productos, no solo llevas contigo un artículo especial, sino que también contribuyes a la recaudación de fondos para la organización del
+        <strong>XII Retiro de Emaús Mujeres</strong>.
+      </p>
+      <p class="pancarta-mision__agradecimiento">
+        ¡Muchas gracias por hacer parte de este propósito de evangelización!
+      </p>
+    </div>
+  </div>
+</section>
 
     
     <CatalogFilters
@@ -143,12 +147,16 @@
       </div>
     </Transition>
 
-    
-    <footer id="contacto" class="pie-catalogo">
+   <footer id="contacto" class="pie-catalogo">
       <div class="pie-catalogo__interior">
+        <!-- Logo de Emaús destacado -->
+        <div class="pie-catalogo__emblema">
+          <img :src="imagenEmaus" alt="Logo XII Retiro de Emaús Mujeres" class="pie-catalogo__logo-emaus" />
+        </div>
+
         <p class="pie-catalogo__parroquia">Parroquia de la Santa Cruz — Tienda Cositas Divinas</p>
         <p class="pie-catalogo__retiro">
-          En apoyo a la organización del <strong>XII Retiro de Emaus Mujeres</strong>
+          En apoyo a la organización del <strong>XII Retiro de Emaús Mujeres</strong>
         </p>
         <p class="pie-catalogo__bendicion">Que Dios bendiga abundantemente tu hogar y a tu familia.</p>
       </div>
@@ -163,12 +171,13 @@ import ProductGrid from '../components/catalog/ProductGrid.vue'
 import { categories } from '../data/categories'
 import { products } from '../data/products'
 import imagenBanner from '../assets/banner.jpeg'
+import imagenEmaus from '../assets/EMAUS.jpeg'
 
 const categoriaSeleccionada = ref('Todos')
 const ordenSeleccionado = ref('default')
-const estaCajonAbierto = ref(true)
+const estaCajonAbierto = ref(false)
 const paginaActual = ref(1)
-alternarCajon()
+
 
 const productosPorPagina = ref(24)
 const contenedorProductos = ref(null)
@@ -747,6 +756,29 @@ onBeforeUnmount(() => {
   font-size: .84rem;
   font-style: italic;
   margin: .35rem 0 0;
+}
+.pancarta-mision__encabezado-causa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pancarta-mision__logo-emaus {
+  height: 4.5rem;
+  width: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--line);
+}
+
+@media (max-width: 560px) {
+  .pancarta-mision__logo-emaus {
+    height: 3.5rem;
+  }
 }
 
 @keyframes animacion-entrada-intro {

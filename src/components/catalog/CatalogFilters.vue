@@ -2,8 +2,8 @@
   <section id="categorias" class="seccion-cajones-categorias" aria-label="Cajones de categorías">
     <div class="cajones-categorias__encabezado">
       <div>
-        <span class="cajones-categorias__antetitulo">Categorías de la Tienda</span>
-        <h2 class="cajones-categorias__titulo">Articulos Por Categorías</h2>
+        
+        <h2 class="cajones-categorias__titulo" style="color: #b58a3a;">Articulos Por Categorías</h2>
       </div>
       <p class="cajones-categorias__subtitulo">
         Toca cualquier Categoria para desplegar su colección de productos.

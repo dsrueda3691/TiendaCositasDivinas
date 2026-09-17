@@ -1,16 +1,18 @@
 <template>
   <aside class="navbar">
     <div class="navbar__top-bar">
-      <!-- Marca y Logo -->
+      <!-- Marca con ambos logos -->
       <a class="navbar__brand" href="#" aria-label="Tienda Cositas Divinas">
-        <img :src="logo" alt="Logo de la Parroquia de la Santa Cruz" class="navbar__logo" />
+        <div class="navbar__logos-container">
+          <img :src="logo" alt="Logo Parroquia de la Santa Cruz" class="navbar__logo" />
+          <img :src="logoEmaus" alt="Logo Emaús" class="navbar__logo navbar__logo--emaus" />
+        </div>
         <div class="navbar__brand-text">
           <span class="navbar__store">Tienda Cositas Divinas</span>
           <span class="navbar__parish">Parroquia de la Santa Cruz</span>
         </div>
       </a>
 
-      <!-- Botón de Carrito Exclusivo para Móvil (Icono con exponente) -->
       <button
         class="navbar__mobile-cart-btn"
         type="button"
@@ -34,7 +36,6 @@
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
 
-        <!-- Exponente con la cantidad total de productos -->
         <Transition name="badge-pop">
           <span
             v-if="cartCount > 0"
@@ -47,21 +48,11 @@
       </button>
     </div>
 
-    <!-- Widget de Carrito para Desktop (Sidebar) -->
+    <!-- Widget Carrito Desktop -->
     <div class="navbar__desktop-cart-widget" @click="openCart">
       <div class="navbar__desktop-cart-header">
         <div class="navbar__desktop-cart-icon-wrap">
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="9" cy="21" r="1"></circle>
             <circle cx="20" cy="21" r="1"></circle>
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -85,22 +76,19 @@
         {{ cartCount > 0 ? 'Ver carrito / Comprar' : 'Abrir carrito' }}
       </button>
     </div>
-
-   
   </aside>
 
-  
   <CartDrawer />
 </template>
 
 <script setup>
 import logo from '../../assets/logo.JPG'
+import logoEmaus from '../../assets/EMAUS.jpeg'
 import CartDrawer from '../cart/CartDrawer.vue'
 import { useCart } from '../../composables/useCart'
 
 const { cartCount, cartTotal, openCart, formatPrice } = useCart()
 </script>
-
 <style>
 /* ── Desktop sidebar ────────────────────────────────── */
 .navbar {
@@ -133,10 +121,18 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
   display: flex;
   flex-direction: column;
   font-weight: 800;
-  gap: .35rem;
+  gap: .65rem;
   padding-bottom: 1.25rem;
   text-align: center;
   transition: opacity .2s ease;
+}
+
+/* Contenedor de doble logo */
+.navbar__logos-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
 }
 
 .navbar__brand-text {
@@ -150,11 +146,15 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
   border: 2px solid var(--accent);
   border-radius: .75rem;
   box-shadow: 0 6px 16px rgba(44, 42, 40, .1);
-  height: 8rem;
+  height: 7rem;
   object-fit: contain;
   padding: .25rem;
-  width: 8rem;
+  width: 6rem;
   transition: transform .25s ease;
+}
+
+.navbar__logo--emaus {
+  border-color: #b58a3a;
 }
 
 .navbar__store { font-size: 1.05rem; line-height: 1.2; }
@@ -298,7 +298,7 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* ── Mobile top bar (Optimizado para no tapar la pantalla) ── */
+/* ── Mobile top bar ─────────────────────────────────── */
 @media (max-width: 900px) {
   .navbar {
     animation: navbar-enter-mobile .3s ease-out both;
@@ -336,12 +336,13 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
     gap: .05rem;
   }
 
+  /* Logos más grandes y legibles en móviles (aumentado de 3.2rem a 4.2rem) */
   .navbar__logo {
     border: 2px solid var(--accent);
     border-radius: .6rem;
     box-shadow: 0 2px 8px rgba(44, 42, 40, .12);
-    height: 3.2rem;
-    width: 3.2rem;
+    height: 4.2rem;
+    width: 4.2rem;
     padding: .15rem;
     flex-shrink: 0;
   }
@@ -357,12 +358,10 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
     line-height: 1.2;
   }
 
-  /* Ocultar el widget grande de desktop en móvil */
   .navbar__desktop-cart-widget {
     display: none;
   }
 
-  /* ── Botón Icono de Carrito para Móvil con Exponente ── */
   .navbar__mobile-cart-btn {
     align-items: center;
     background: var(--surface);
@@ -391,7 +390,6 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
     stroke: var(--accent-strong);
   }
 
-  /* Exponente flotante en la esquina superior derecha */
   .navbar__mobile-cart-badge {
     align-items: center;
     background: #d9534f;
@@ -411,7 +409,6 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
     top: -.35rem;
   }
 
-  /* Animación pop al cambiar la cantidad del exponente */
   .badge-pop-enter-active {
     animation: badge-scale-in .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
@@ -430,7 +427,6 @@ const { cartCount, cartTotal, openCart, formatPrice } = useCart()
     100% { transform: scale(0); opacity: 0; }
   }
 
-  /* Barra de enlaces horizontales */
   .navbar__nav {
     display: flex;
     gap: .25rem;

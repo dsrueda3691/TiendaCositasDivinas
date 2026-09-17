@@ -1,157 +1,214 @@
-# ⛪ Catálogo Digital — Tienda Cositas Divinas
-> **Parroquia de la Santa Cruz**  
-> Aplicación web moderna, interactiva y optimizada al 100% para dispositivos móviles (*Mobile-First*) desarrollada con **Vue 3** y **Vite**.
+# Tienda Cositas Divinas
 
-![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![WhatsApp](https://img.shields.io/badge/WhatsApp-Orders-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)
-![Mobile First](https://img.shields.io/badge/UX-Mobile--First-FF6B6B?style=for-the-badge)
-![Security](https://img.shields.io/badge/Security-CSP%20%7C%20HSTS%20%7C%20SSL-blue?style=for-the-badge)
+Catálogo digital de la **Parroquia de la Santa Cruz** para consultar artículos religiosos, detalles para el hogar y productos devocionales. La aplicación permite explorar el catálogo, consultar los detalles de cada artículo, preparar una selección de compra y enviarla directamente por WhatsApp.
 
----
+> Los productos vendidos apoyan la recaudación de fondos para la organización del **XII Retiro de Emaús Mujeres**.
 
-## 📖 Descripción del Proyecto
+## Sitio publicado
 
-Este proyecto es el catálogo digital oficial de la **Tienda Cositas Divinas**, perteneciente a la **Parroquia de la Santa Cruz**. Permite a los feligreses y visitantes explorar de manera rápida, fluida e intuitiva una variedad de 60 artículos religiosos, regalos y detalles para el hogar divididos en cajones de categorías interactivos, con carrito de compras y pedido directo por **WhatsApp**.
+La versión en producción está disponible en:
 
-> **Misión Evangelizadora y Social:**  
-> *"Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción. Al adquirir nuestros productos, no solo llevas contigo un artículo especial, sino que también contribuyes a la recaudación de fondos para la organización del **XII Retiro de Emaús Mujeres**."*
+**[https://tienda-cositas-divinas.vercel.app/](https://tienda-cositas-divinas.vercel.app/)**
 
----
+## Propósito
 
-## ✨ Características Principales
+El proyecto funciona como un escaparate digital sencillo y accesible para la tienda parroquial. No procesa pagos ni gestiona inventario en línea: su objetivo es que la persona pueda conocer los productos, armar un pedido y consultar disponibilidad, entrega y medios de pago con la parroquia a través de WhatsApp.
 
-### 🛒 Carrito de Compras Móvil con Icono y Exponente
-- **Icono compacto en móvil**: En pantallas de teléfono, el carrito no obstruye la pantalla ni bloquea la visualización de los artículos; se ubica como un icono estilizado en la barra superior.
-- **Exponente dinámico (*Badge*)**: Muestra en tiempo real la cantidad total acumulada de artículos seleccionados con micro-animaciones al añadir unidades.
-- **Cajón desplegable (*Bottom Sheet* / Drawer)**: Al presionar el icono, se despliega una interfaz fluida desde la parte inferior que incluye:
-  - Imagen, nombre, categoría y precio unitario de cada producto.
-  - Controles de cantidad (`−` y `+`) con actualización instantánea y botón de eliminación.
-  - Cálculo automático del total en Pesos Colombianos (COP).
-  - Botón de acción directa hacia WhatsApp con el pedido listo.
-- **Persistencia en `localStorage`**: La selección del usuario permanece guardada si se recarga la página o se navega entre aplicaciones.
+## Funcionalidades
 
-### 💬 Pedidos Directos por WhatsApp (+57 301 7705554)
-- Al hacer clic en **"Consultar disponibilidad / Comprar"**, se abre automáticamente una conversación en WhatsApp dirigida al número **`+57 301 7705554`**.
-- El mensaje prediseñado incluye:
-  - Saludo cordial e identificación de la tienda parroquial.
-  - Mención al propósito del XII Retiro de Emaús Mujeres.
-  - Lista estructurada con cantidades, nombres de productos, precios y referencias.
-  - Total de la compra y solicitud de instrucciones de entrega y métodos de pago.
+### Catálogo y navegación
 
-### 🗄️ Categorías en Cajones Interactivos Tipo Card
-- Cada categoría se presenta como una tarjeta elegante con imagen representativa, contador de productos, título, descripción y botón para desplegar.
-- Al seleccionar una categoría, la sección `#productos` se expande con desplazamiento suave e inteligente.
+- Muestra una colección de **60 artículos** con imagen, nombre, descripción, categoría y precio en pesos colombianos (COP).
+- Organiza los productos en estas categorías:
+  - **Hogar y Decoración:** 13 productos.
+  - **Pines y Llaveros:** 16 productos.
+  - **Pastilleros e Imanes:** 17 productos.
+  - **Bolsos y Fundas:** 6 productos.
+  - **Librería y Devoción:** 8 productos.
+  - **Todos:** la colección completa.
+- Presenta las categorías como cajones interactivos. Al seleccionar uno, la aplicación despliega su colección y desplaza la vista hasta los productos.
+- Permite cerrar el cajón activo y volver a abrirlo desde el estado vacío.
+- Incluye paginación cuando la categoría tiene más productos de los que caben en la página actual.
+- Muestra hasta 24 productos por página en escritorio y hasta 16 en teléfonos pequeños.
+- Carga las imágenes de producto de forma diferida para mejorar el rendimiento.
 
-### � Mayor Capacidad de Visualización
-- **Escritorio**: Hasta **24 productos por página** para una navegación amplia y continua.
-- **Móviles**: Hasta **16 productos por página**, optimizando la velocidad de carga y reduciendo la necesidad de paginación constante.
+### Ordenamiento
 
-### 🛡️ Seguridad, Privacidad y Cifrado SSL/TLS
-- **Cifrado HTTPS obligatorio**: Implementación de `upgrade-insecure-requests` en la directiva CSP para garantizar que todas las conexiones viajen encriptadas con SSL/TLS.
-- **Content Security Policy (CSP)**: Protección contra ataques de inyección de código (XSS), restringiendo la ejecución y carga de recursos únicamente a fuentes autorizadas y seguras (Google Fonts, Unsplash, WhatsApp).
-- **Cabeceras de respuesta seguras**:
-  - `Strict-Transport-Security (HSTS)`: Obliga al navegador a usar HTTPS de forma estricta (`max-age=63072000; includeSubDomains; preload`).
-  - `X-Content-Type-Options: nosniff`: Previene ataques basados en confusión de tipos MIME.
-  - `X-Frame-Options: SAMEORIGIN`: Protege contra ataques de *clickjacking* o incrustaciones no autorizadas en iframes.
-  - `Permissions-Policy`: Restringe el acceso innecesario a hardware del dispositivo (cámara, micrófono, geolocalización).
-- **Archivos listos para producción**: Incluye `vercel.json` y `public/_headers` (Netlify / Cloudflare Pages) preconfigurados.
-- **Arquitectura estática segura**: Al ser una aplicación cliente sin base de datos SQL en el servidor, existe **cero riesgo de inyección SQL**.
+Dentro de la categoría desplegada se puede ordenar la lista por:
 
-### 🇪🇸 Estandarización de Código en Español
-- Toda la base del código (nombres de clases CSS, funciones, estados reactivos del composable `useCart.js`, métodos y transiciones) está estandarizada en idioma español, facilitando el mantenimiento y la comprensión del proyecto.
+- Recomendados, en el orden original del catálogo.
+- Menor precio.
+- Mayor precio.
+- Nombre de A a Z.
+- Nombre de Z a A.
 
----
+Al cambiar de categoría, orden o página, la aplicación regresa a la primera página y desplaza suavemente la vista al comienzo de los resultados.
 
-## 📁 Estructura del Proyecto
+### Detalles de productos
+
+- Cada tarjeta se puede abrir para consultar una vista ampliada.
+- El panel de detalles incluye imagen, descripción, precio, categoría y referencia con formato `#CD-XXX`.
+- Desde la tarjeta o desde el panel de detalles se puede agregar el artículo al carrito.
+- La cantidad se puede aumentar o disminuir sin salir del catálogo.
+- El panel se adapta a escritorio y dispositivos móviles y bloquea temporalmente el desplazamiento del fondo mientras está abierto.
+
+### Carrito de compras
+
+- El carrito está disponible como widget lateral en escritorio y como botón con contador en dispositivos móviles.
+- Muestra la cantidad total de unidades seleccionadas y el total estimado.
+- Permite aumentar o disminuir cantidades, eliminar artículos individualmente o vaciar toda la selección.
+- Muestra el precio unitario y el subtotal de cada artículo.
+- Guarda la selección en `localStorage` con la clave `cositas_divinas_cart`, por lo que el carrito se conserva al recargar la página en el mismo navegador.
+- Ofrece un estado vacío con acceso para continuar explorando el catálogo.
+
+### Pedidos por WhatsApp
+
+El botón **Consultar disponibilidad / Comprar** abre WhatsApp hacia el número de la tienda, `+57 301 770 5554`, con un mensaje generado automáticamente. El mensaje incluye:
+
+- Saludo e identificación de la Tienda Cositas Divinas.
+- Referencia de apoyo al XII Retiro de Emaús Mujeres.
+- Cantidad y nombre de cada producto.
+- Precio de cada línea y referencia del artículo.
+- Total estimado en COP.
+- Solicitud de confirmación de disponibilidad, medios de pago y entrega.
+
+La disponibilidad, el valor final, el pago y la entrega deben confirmarse directamente con la parroquia.
+
+### Experiencia y accesibilidad
+
+- Diseño responsive con enfoque mobile-first.
+- Navegación por teclado en las tarjetas de categorías mediante `Enter` y `Espacio`.
+- Etiquetas `alt`, roles ARIA, nombres accesibles para botones y diálogos modales.
+- Animaciones de entrada, transiciones del carrito y reducción de movimiento cuando el sistema activa `prefers-reduced-motion`.
+- Fuentes e imágenes optimizadas para una experiencia fluida en dispositivos móviles.
+
+### Analítica
+
+La aplicación integra `@vercel/analytics` desde `src/main.js` para habilitar la analítica de Vercel en el despliegue publicado.
+
+## Tecnologías utilizadas
+
+- [Vue 3](https://vuejs.org/) con Composition API y componentes `.vue`.
+- [Vite](https://vite.dev/) como servidor de desarrollo y herramienta de compilación.
+- JavaScript con módulos ES.
+- CSS modular por componente y estilos globales.
+- `localStorage` para la persistencia local del carrito.
+- WhatsApp mediante enlaces `wa.me`, sin API de servidor.
+- Vercel para el alojamiento de producción y la analítica.
+
+## Estructura del proyecto
 
 ```text
 Catalogo/
-├── .gitignore                     # Archivos y carpetas ignorados por git
-├── index.html                     # HTML principal con CSP, HSTS y metadatos móviles
-├── package.json                   # Dependencias y scripts del proyecto
-├── README.md                      # Documentación completa del proyecto
-├── vercel.json                    # Cabeceras de seguridad para despliegues en Vercel
-├── vite.config.js                 # Configuración del empaquetador Vite
+├── index.html                  # Documento HTML, metadatos y CSP del cliente
+├── package.json                # Dependencias y comandos npm
+├── README.md                   # Documentación del proyecto
+├── vercel.json                 # Cabeceras de seguridad para Vercel
+├── vite.config.js              # Configuración de Vite y el plugin de Vue
 ├── public/
-│   └── _headers                   # Cabeceras de seguridad para Netlify y Cloudflare
+│   └── _headers                # Archivo de referencia para plataformas compatibles
 └── src/
-    ├── App.vue                    # Componente raíz de la aplicación
-    ├── main.js                    # Punto de entrada de Vue 3
+    ├── App.vue                 # Composición raíz: barra lateral y catálogo
+    ├── main.js                 # Punto de entrada y analítica de Vercel
     ├── assets/
-    │   ├── logo.JPG               # Escudo oficial de la Parroquia
-    │   ├── main.css               # Estilos globales, variables y utilidades móviles
-    │   ├── base.css               # Paleta de colores y tipografía base
-    │   └── Productos/             # Fotografías originales de los productos
-    ├── composables/
-    │   └── useCart.js             # Estado global del carrito y generador de pedidos WhatsApp
+    │   ├── base.css            # Variables y estilos base
+    │   ├── main.css             # Estilos globales de la aplicación
+    │   └── Productos/           # Imágenes locales del catálogo
     ├── components/
     │   ├── cart/
-    │   │   └── CartDrawer.vue     # Cajón deslizable y modal del carrito de compras
-    │   ├── layout/
-    │   │   └── Navbar.vue         # Barra de navegación superior con icono de carrito
-    │   └── catalog/
-    │       ├── CatalogFilters.vue # Cajones de categorías tipo card
-    │       ├── ProductCard.vue    # Tarjeta de producto y modal de detalles ampliado
-    │       ├── ProductGrid.vue    # Cuadrícula adaptable de productos
-    │       └── SortSelect.vue     # Selector de ordenamiento (precio, nombre)
+    │   │   └── CartDrawer.vue  # Panel, resumen y enlace de WhatsApp
+    │   ├── catalog/
+    │   │   ├── CatalogFilters.vue # Cajones de categorías
+    │   │   ├── ProductCard.vue     # Tarjeta y detalles de producto
+    │   │   ├── ProductGrid.vue     # Cuadrícula responsive
+    │   │   └── SortSelect.vue      # Selector reutilizable de ordenamiento
+    │   └── layout/
+    │       └── Navbar.vue       # Marca y acceso al carrito
+    ├── composables/
+    │   └── useCart.js           # Estado, cálculos y persistencia del carrito
     ├── data/
-    │   ├── categories.js          # Datos y descripciones de las categorías
-    │   └── products.js            # Base de 60 productos catalogados
+    │   ├── categories.js        # Categorías, textos e imágenes representativas
+    │   └── products.js          # Datos de los 60 productos
     └── views/
-        └── CatalogView.vue        # Vista principal con banner de misión y catálogo
+        └── CatalogView.vue      # Vista principal, filtros y paginación
 ```
 
----
+## Requisitos
 
-## 🚀 Instalación y Desarrollo Local
+- Node.js 18 o una versión posterior.
+- npm 9 o una versión posterior.
+- Un navegador moderno con soporte para módulos ES, `localStorage` e `IntersectionObserver`.
 
-### Prerrequisitos
-- **Node.js**: v18.0.0 o superior
-- **npm**: v9.0.0 o superior
+## Instalación y desarrollo local
 
 ```bash
-# 1. Clonar el repositorio
 git clone https://github.com/dsrueda3691/TiendaCositasDivinas.git
 cd TiendaCositasDivinas
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Iniciar el servidor local de desarrollo
 npm run dev
-
-# 4. Compilar para producción (genera la carpeta dist/)
-npm run build
-
-# 5. Previsualizar la compilación de producción localmente
-npm run preview
 ```
 
----
+Vite mostrará la URL local, normalmente `http://localhost:5173`.
 
-## 🌐 Despliegue en Producción y Protección WAF
+## Comandos disponibles
 
-Para alojar esta página en la web con certificado SSL y firewall WAF gratuito:
+| Comando | Descripción |
+| --- | --- |
+| `npm install` | Instala las dependencias del proyecto. |
+| `npm run dev` | Inicia el servidor de desarrollo con recarga automática. |
+| `npm run build` | Genera la compilación optimizada en `dist/`. |
+| `npm run preview` | Sirve localmente la compilación de producción. |
 
-1. **Alojamiento con SSL automático (HTTPS)**:
-   - Conectar el repositorio de GitHub a [Vercel](https://vercel.com) o [Netlify](https://netlify.com).
-   - El certificado SSL/TLS de Let's Encrypt se activará y renovará de forma **100% automática y gratuita**.
-   - Las cabeceras de seguridad de `vercel.json` o `public/_headers` se aplicarán automáticamente.
-
-2. **Firewall WAF y Anti-DDoS (Opcional recomendado)**:
-   - Para añadir una capa extra de protección contra tráfico malicioso, bots y ataques DDoS de capa 7, se puede conectar el dominio a **Cloudflare (Plan Gratuito)**.
-   - Cloudflare funcionará como un escudo WAF global y optimizará la entrega de imágenes a través de su CDN.
-
----
-
-## 📤 Control de Versiones
+Antes de publicar cambios, se recomienda ejecutar:
 
 ```bash
-# Registrar cambios y confirmar
-git add .
-git commit -m "docs: actualizar documentacion en espanol con politicas de seguridad y visualizacion"
-
-# Subir a la rama principal
-git push origin main
+npm run build
 ```
+
+## Despliegue en Vercel
+
+El proyecto ya está desplegado en Vercel en [tienda-cositas-divinas.vercel.app](https://tienda-cositas-divinas.vercel.app/).
+
+Para conectar el repositorio o actualizar el proyecto:
+
+1. Importar `dsrueda3691/TiendaCositasDivinas` en Vercel.
+2. Mantener el framework como **Vite**.
+3. Usar `npm run build` como comando de compilación.
+4. Usar `dist` como directorio de salida.
+5. Publicar la rama principal o activar los despliegues automáticos desde GitHub.
+
+Vercel sirve automáticamente la aplicación por HTTPS. El archivo `vercel.json` añade estas cabeceras a las respuestas:
+
+- `Strict-Transport-Security` para forzar HTTPS en navegadores compatibles.
+- `X-Content-Type-Options: nosniff` para evitar la interpretación incorrecta de tipos MIME.
+- `X-Frame-Options: SAMEORIGIN` para reducir riesgos de clickjacking.
+- `Referrer-Policy: strict-origin-when-cross-origin` para limitar la información enviada en el referente.
+- `Permissions-Policy` para deshabilitar cámara, micrófono, geolocalización y pagos, funciones que la aplicación no utiliza.
+
+Además, `index.html` define una política CSP, metadatos responsive y configuración de idioma, tema y descripción.
+
+## Cómo actualizar el catálogo
+
+Los productos se mantienen en `src/data/products.js`. Para agregar o modificar un artículo:
+
+1. Añadir la imagen correspondiente en `src/assets/Productos/`.
+2. Registrar el archivo mediante el nombre exacto usado por `getImage()`.
+3. Crear o actualizar el objeto del producto con `id`, `nombre`, `precio`, `imagen`, `descripcion` y `categoria`.
+4. Verificar que la categoría coincida exactamente con una de las categorías disponibles.
+5. Actualizar los contadores y textos de `src/data/categories.js` si cambia el total de una categoría.
+6. Ejecutar `npm run build` y revisar el flujo de catálogo, carrito y WhatsApp.
+
+El número de WhatsApp y el texto del pedido se encuentran en `src/composables/useCart.js`. Si cambia el número de contacto, deben actualizarse el destino `wa.me` y el texto de referencia en el mismo archivo.
+
+## Alcance y limitaciones actuales
+
+- No existe backend, base de datos, autenticación ni panel administrativo.
+- El inventario se define en archivos JavaScript y se publica junto con la aplicación.
+- El carrito se guarda únicamente en el navegador de cada visitante; no se sincroniza entre dispositivos.
+- No hay pago en línea: WhatsApp es el canal para confirmar disponibilidad, precio final, pago y entrega.
+- Los precios mostrados son estimados y deben validarse antes de cerrar la compra.
+- El despliegue es una aplicación estática generada por Vite.
+
+## Licencia y contenido
+
+Este repositorio contiene el código, textos e imágenes del catálogo de la Tienda Cositas Divinas y de la Parroquia de la Santa Cruz. Antes de reutilizar o redistribuir fotografías, logotipos, textos o datos de contacto, solicita autorización a sus responsables.

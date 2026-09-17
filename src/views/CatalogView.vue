@@ -55,7 +55,7 @@
      
         <div class="cajon-desplegado__pancarta">
           <div class="cajon-desplegado__informacion-pancarta">
-            <span class="cajon-desplegado__antetitulo">Cajón desplegado</span>
+            <span class="cajon-desplegado__antetitulo">Categoria desplegado</span>
             <h2 class="cajon-desplegado__titulo">
               {{ tituloCategoriaActual }}
               <span class="cajon-desplegado__conteo">({{ productosFiltrados.length }} productos)</span>

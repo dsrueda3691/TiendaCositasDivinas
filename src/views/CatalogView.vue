@@ -1,12 +1,13 @@
 <template>
   <div id="inicio" class="vista-catalogo">
-    <header class="vista-catalogo__introduccion">
-      <p class="vista-catalogo__antetitulo">Detalles que acompañan cada momento</p>
-      <h1 class="titulo">Tienda Cositas Divinas</h1>
-     <p class="pancarta-mision__cita">
-            Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
-          </p>
-    </header>
+   <header class="vista-catalogo__introduccion">
+  <p class="vista-catalogo__antetitulo">TIENDA</p>
+  <h1 class="vista-catalogo__titulo-principal">Cositas Divinas</h1>
+  <p class="vista-catalogo__subtitulo">Artículos Religiosos y Espirituales</p>
+  <p class="pancarta-mision__cita">
+    Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
+  </p>
+</header>
 
     <section id="proposito" class="pancarta-mision" aria-label="Propósito de evangelización">
   <div class="pancarta-mision__interior">
@@ -300,33 +301,59 @@ onBeforeUnmount(() => {
 font-family: cursive;
 
 }
-
-/* ── Encabezado de Introducción ─────────────────────── */
 .vista-catalogo__introduccion {
   animation: animacion-entrada-intro .3s ease-out both;
-  margin-bottom: 1.5rem;
+  margin: 0 auto 2.5rem auto; /* Centra la sección en la pantalla */
   max-width: 720px;
+  text-align: center; /* Centra todo el texto */
 }
 
 .vista-catalogo__antetitulo {
-  color: var(--accent);
-  font-size: .8rem;
-  font-weight: 700;
-  letter-spacing: .08em;
+  color: #b58a3a;
+  font-family: 'Cinzel', serif;
+  font-size: 2.15rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  margin: 0 0 0.2rem 0;
   text-transform: uppercase;
 }
 
-.vista-catalogo h1 {
-  font-size: clamp(1.6rem, 5vw, 3.2rem);
-  line-height: 1.15;
-  margin: .3rem 0 .6rem;
-  color: var(--ink);
+
+.vista-catalogo__titulo-principal {
+  color: #1e293b;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 6.5vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.01em;
 }
 
-.vista-catalogo__introduccion > p:last-child {
+
+.vista-catalogo__subtitulo {
+  color: #b58a3a;
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  margin: 1rem 0 1.2rem 0;
+}
+
+/* Cita o descripción inferior con línea centrada */
+.vista-catalogo__introduccion .pancarta-mision__cita {
   color: var(--muted);
-  font-size: .95rem;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.98rem;
+  font-style: normal;
+  font-weight: 400;
   line-height: 1.5;
+  margin: 0.8rem auto 0 auto;
+  max-width: 32rem;
+}
+
+/* Centra la línea decorativa inferior de la cita */
+.vista-catalogo__introduccion .pancarta-mision__cita::after {
+  margin: 1rem auto 0 auto;
 }
 
 /* ── Banner de Propósito (XII Retiro de Emaús Mujeres) ── */

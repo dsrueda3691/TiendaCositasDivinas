@@ -6,7 +6,7 @@
   --canvas: #f8f4ea;
   --ink: #292725;
   --line: #dcceb5;
-  --muted: #756b61;
+  --muted: #5f564e;
   --soft-accent: #e6eadf;
   --surface: #fffdf8;
   --olive: #66704a;
@@ -41,15 +41,19 @@ button, a, [role="button"] {
 }
 
 /* Utility: hide scrollbar for horizontal scroll containers */
-.hide-scrollbar {
+.hide-scrollbar,
+.ocultar-barra-desplazamiento {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.hide-scrollbar::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar,
+.ocultar-barra-desplazamiento::-webkit-scrollbar {
   display: none;
 }
 
 /* Body scroll lock when details panel is open */
-body.details-open {
+body.details-open,
+body.detalles-abiertos {
   overflow: hidden;
 }
+

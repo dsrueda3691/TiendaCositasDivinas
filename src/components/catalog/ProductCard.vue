@@ -122,23 +122,33 @@
               >
                 <span aria-hidden="true">+</span> Agregar al carrito
               </button>
-              <div v-else key="details-quantity" class="details-panel__quantity" aria-label="Cantidad seleccionada">
-                <span class="details-panel__quantity-label">Cantidad</span>
-                <div class="product-card__quantity">
-                  <button type="button" aria-label="Disminuir cantidad" @click="decreaseQuantity">
-                    −
-                  </button>
-                  <input
-                    :value="selectedQuantity"
-                    type="number"
-                    min="1"
-                    readonly
-                    aria-label="Cantidad seleccionada"
-                  />
-                  <button type="button" aria-label="Aumentar cantidad" @click="increaseQuantity">
-                    +
-                  </button>
+              <div v-else key="details-quantity" class="details-panel__quantity-group">
+                <div class="details-panel__quantity" aria-label="Cantidad seleccionada">
+                  <span class="details-panel__quantity-label">Cantidad</span>
+                  <div class="product-card__quantity">
+                    <button type="button" aria-label="Disminuir cantidad" @click="decreaseQuantity">
+                      −
+                    </button>
+                    <input
+                      :value="selectedQuantity"
+                      type="number"
+                      min="1"
+                      readonly
+                      aria-label="Cantidad seleccionada"
+                    />
+                    <button type="button" aria-label="Aumentar cantidad" @click="increaseQuantity">
+                      +
+                    </button>
+                  </div>
                 </div>
+
+                <button
+                  class="details-panel__view-cart-btn"
+                  type="button"
+                  @click="openCartFromDetails"
+                >
+                  Ver en el carrito ({{ selectedQuantity }}) 🛒
+                </button>
               </div>
             </Transition>
           </div>
@@ -149,7 +159,8 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useCart } from '../../composables/useCart'
 
 const props = defineProps({
   product: { type: Object, required: true },
@@ -157,8 +168,10 @@ const props = defineProps({
 
 const emit = defineEmits(['add-to-cart', 'set-cart-quantity'])
 
+const { getItemQuantity, setQuantity, addToCart: addCartItem, formatPrice, openCart } = useCart()
+
 const isDetailsOpen = ref(false)
-const selectedQuantity = ref(0)
+const selectedQuantity = computed(() => getItemQuantity(props.product.id))
 const cardElement = ref(null)
 const isCardVisible = ref(true)
 let cardObserver
@@ -171,34 +184,27 @@ function closeDetails() {
   isDetailsOpen.value = false
 }
 
-function addToCart(closePanel = true) {
-  selectedQuantity.value = 1
+function openCartFromDetails() {
+  closeDetails()
+  openCart()
+}
+
+function addToCart(closePanel = false) {
+  addCartItem(props.product, 1)
   emit('add-to-cart', props.product)
   if (closePanel) closeDetails()
 }
 
 function increaseQuantity() {
-  selectedQuantity.value += 1
-  emitQuantity()
+  const newQty = selectedQuantity.value + 1
+  setQuantity(props.product, newQty)
+  emit('set-cart-quantity', { product: props.product, quantity: newQty })
 }
 
 function decreaseQuantity() {
-  selectedQuantity.value -= 1
-
-  if (selectedQuantity.value <= 0) {
-    selectedQuantity.value = 0
-    emit('set-cart-quantity', { product: props.product, quantity: 0 })
-    return
-  }
-
-  emitQuantity()
-}
-
-function emitQuantity() {
-  emit('set-cart-quantity', {
-    product: props.product,
-    quantity: selectedQuantity.value,
-  })
+  const newQty = selectedQuantity.value - 1
+  setQuantity(props.product, newQty)
+  emit('set-cart-quantity', { product: props.product, quantity: Math.max(0, newQty) })
 }
 
 onMounted(() => {
@@ -229,13 +235,6 @@ onBeforeUnmount(() => {
   cardObserver?.disconnect()
   document.body.style.overflow = ''
 })
-
-const formatPrice = (price) =>
-  new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    maximumFractionDigits: 0,
-  }).format(price)
 </script>
 
 <style>
@@ -639,6 +638,83 @@ const formatPrice = (price) =>
 }
 
 .details-panel__facts dt { color: var(--olive); }
+
+.details-panel__cart-button {
+  align-items: center;
+  background: var(--accent);
+  border: none;
+  border-radius: .65rem;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 800;
+  gap: .4rem;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: .75rem 1.25rem;
+  transition: background-color .2s ease, transform .15s ease;
+  width: 100%;
+}
+
+.details-panel__cart-button:hover {
+  background: var(--accent-strong);
+}
+
+.details-panel__cart-button:active {
+  transform: scale(.97);
+}
+
+.details-panel__quantity-group {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  width: 100%;
+}
+
+.details-panel__quantity {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: .6rem;
+  padding: .5rem .85rem;
+}
+
+.details-panel__quantity-label {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.details-panel__view-cart-btn {
+  align-items: center;
+  background: #25d366;
+  border: none;
+  border-radius: .65rem;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: .92rem;
+  font-weight: 800;
+  gap: .5rem;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: .75rem 1rem;
+  transition: background-color .2s ease, transform .15s ease;
+  width: 100%;
+}
+
+.details-panel__view-cart-btn:hover {
+  background: #1ea952;
+}
+
+.details-panel__view-cart-btn:active {
+  transform: scale(.97);
+}
 
 /* ── Ultra Smooth Transition (Desktop & Mobile) ─────── */
 .details-sheet-enter-active,

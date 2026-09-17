@@ -1,99 +1,104 @@
 <template>
   <aside class="navbar">
-    <a class="navbar__brand" href="#" aria-label="Tienda Cositas Divinas">
-      <img :src="logo" alt="Logo de la Parroquia de la Santa Cruz" class="navbar__logo" />
-      <div class="navbar__brand-text">
-        <span class="navbar__store">Tienda Cositas Divinas</span>
-        <span class="navbar__parish">Parroquia de la Santa Cruz</span>
-      </div>
-    </a>
-
-    <section class="navbar__cart" aria-label="Carrito de compras">
-      <div class="navbar__cart-heading">
-        <div>
-          <span class="navbar__cart-kicker">Tu selección</span>
-          <h2>Carrito <span class="navbar__cart-count">{{ cartCount }}</span></h2>
+    <div class="navbar__top-bar">
+      <!-- Marca y Logo -->
+      <a class="navbar__brand" href="#" aria-label="Tienda Cositas Divinas">
+        <img :src="logo" alt="Logo de la Parroquia de la Santa Cruz" class="navbar__logo" />
+        <div class="navbar__brand-text">
+          <span class="navbar__store">Tienda Cositas Divinas</span>
+          <span class="navbar__parish">Parroquia de la Santa Cruz</span>
         </div>
-        <button
-          v-if="cart.length"
-          class="navbar__clear-button"
-          type="button"
-          @click="emit('clear-cart')"
+      </a>
+
+      <!-- Botón de Carrito Exclusivo para Móvil (Icono con exponente) -->
+      <button
+        class="navbar__mobile-cart-btn"
+        type="button"
+        :aria-label="`Carrito de compras con ${cartCount} productos`"
+        @click="openCart"
+      >
+        <svg
+          class="navbar__mobile-cart-svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
         >
-          Vaciar
-        </button>
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+
+        <!-- Exponente con la cantidad total de productos -->
+        <Transition name="badge-pop">
+          <span
+            v-if="cartCount > 0"
+            :key="cartCount"
+            class="navbar__mobile-cart-badge"
+          >
+            {{ cartCount }}
+          </span>
+        </Transition>
+      </button>
+    </div>
+
+    <!-- Widget de Carrito para Desktop (Sidebar) -->
+    <div class="navbar__desktop-cart-widget" @click="openCart">
+      <div class="navbar__desktop-cart-header">
+        <div class="navbar__desktop-cart-icon-wrap">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span v-if="cartCount > 0" class="navbar__desktop-cart-badge">{{ cartCount }}</span>
+        </div>
+        <div class="navbar__desktop-cart-info">
+          <span class="navbar__desktop-cart-title">Mi Carrito</span>
+          <span class="navbar__desktop-cart-sub">
+            {{ cartCount === 0 ? 'Vacío' : `${cartCount} artículos` }}
+          </span>
+        </div>
       </div>
 
-      <p v-if="!cart.length" class="navbar__cart-empty">
-        Agrega productos para consultar su disponibilidad por WhatsApp.
-      </p>
+      <div v-if="cartCount > 0" class="navbar__desktop-cart-total">
+        <span>Total:</span>
+        <strong>{{ formatPrice(cartTotal) }}</strong>
+      </div>
 
-      <TransitionGroup v-else name="cart-list" tag="ul" class="navbar__cart-list">
-        <li v-for="item in cart" :key="item.id" class="navbar__cart-item">
-          <img :src="item.imagen" :alt="item.nombre" />
-          <div class="navbar__cart-item-info">
-            <strong>{{ item.nombre }}</strong>
-            <span>{{ item.quantity }} x {{ formatPrice(item.precio) }}</span>
-          </div>
-          <button
-            class="navbar__remove-button"
-            type="button"
-            :aria-label="`Quitar ${item.nombre} del carrito`"
-            @click="emit('remove-from-cart', item.id)"
-          >
-            ×
-          </button>
-        </li>
-      </TransitionGroup>
+      <button class="navbar__desktop-cart-btn" type="button" @click.stop="openCart">
+        {{ cartCount > 0 ? 'Ver carrito / Comprar' : 'Abrir carrito' }}
+      </button>
+    </div>
 
-      <a
-        class="navbar__whatsapp"
-        :class="{ 'navbar__whatsapp--disabled': !cart.length }"
-        :href="whatsappUrl"
-        :aria-disabled="!cart.length"
-        target="_blank"
-        rel="noopener noreferrer"
-        @click="handleWhatsAppClick"
-      >
-        Consultar disponibilidad <span aria-hidden="true">↗</span>
-      </a>
-    </section>
+   
   </aside>
+
+  
+  <CartDrawer />
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import logo from '../../assets/logo.JPG'
+import CartDrawer from '../cart/CartDrawer.vue'
+import { useCart } from '../../composables/useCart'
 
-const props = defineProps({
-  cart: { type: Array, default: () => [] },
-  cartCount: { type: Number, default: 0 },
-})
-
-const emit = defineEmits(['remove-from-cart', 'clear-cart'])
-
-const whatsappUrl = computed(() => {
-  const lines = props.cart.map((item) => `- ${item.nombre} (cantidad: ${item.quantity})`)
-  const message = [
-    'Hola, quisiera consultar la disponibilidad de estos productos:',
-    ...lines,
-    '',
-    'Gracias.',
-  ].join('\n')
-
-  return `https://wa.me/573017705554?text=${encodeURIComponent(message)}`
-})
-
-function handleWhatsAppClick(event) {
-  if (!props.cart.length) event.preventDefault()
-}
-
-const formatPrice = (price) =>
-  new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    maximumFractionDigits: 0,
-  }).format(price)
+const { cartCount, cartTotal, openCart, formatPrice } = useCart()
 </script>
 
 <style>
@@ -105,14 +110,20 @@ const formatPrice = (price) =>
   box-shadow: 10px 0 24px rgba(44, 42, 40, .07);
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
   height: 100vh;
-  padding: 2rem 1.5rem;
+  padding: 1.75rem 1.25rem;
   position: sticky;
   top: 0;
   overflow-y: auto;
   will-change: transform, opacity;
   z-index: 10;
+}
+
+.navbar__top-bar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .navbar__brand {
@@ -123,7 +134,7 @@ const formatPrice = (price) =>
   flex-direction: column;
   font-weight: 800;
   gap: .35rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
   text-align: center;
   transition: opacity .2s ease;
 }
@@ -139,50 +150,122 @@ const formatPrice = (price) =>
   border: 2px solid var(--accent);
   border-radius: .75rem;
   box-shadow: 0 6px 16px rgba(44, 42, 40, .1);
-  height: 8.5rem;
+  height: 8rem;
   object-fit: contain;
   padding: .25rem;
-  width: 8.5rem;
+  width: 8rem;
   transition: transform .25s ease;
 }
 
-.navbar__store { font-size: 1.1rem; line-height: 1.2; }
+.navbar__store { font-size: 1.05rem; line-height: 1.2; }
 .navbar__parish { color: var(--muted); font-size: .78rem; font-weight: 600; line-height: 1.35; }
 
-.navbar__cart {
-  background: var(--canvas);
-  border: 1px solid var(--line);
-  border-radius: .9rem;
-  display: grid;
-  gap: .9rem;
-  padding: 1rem;
+/* Botón de carrito móvil: oculto en desktop */
+.navbar__mobile-cart-btn {
+  display: none;
 }
 
-.navbar__cart-heading { align-items: start; display: flex; justify-content: space-between; gap: .5rem; }
-.navbar__cart-kicker { color: var(--accent); font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.navbar__cart h2 { font-size: 1.05rem; line-height: 1.2; margin: .2rem 0 0; }
-.navbar__cart-count { background: var(--accent); border-radius: 999px; color: #fff; font-size: .7rem; padding: .16rem .42rem; vertical-align: .12rem; }
-.navbar__clear-button, .navbar__remove-button { background: transparent; border: 0; color: var(--muted); cursor: pointer; font: inherit; font-size: .74rem; padding: .2rem; }
-.navbar__clear-button:hover, .navbar__remove-button:hover { color: var(--accent-strong); }
-.navbar__cart-empty { color: var(--muted); font-size: .8rem; line-height: 1.45; margin: 0; }
-.navbar__cart-list { display: grid; gap: .65rem; list-style: none; margin: 0; max-height: 15rem; overflow-y: auto; padding: 0; }
-.cart-list-enter-active,
-.cart-list-leave-active,
-.cart-list-move { transition: opacity .24s ease, transform .24s cubic-bezier(0.16, 1, 0.3, 1); }
-.cart-list-enter-from { opacity: 0; transform: translateX(-10px); }
-.cart-list-leave-to { opacity: 0; transform: translateX(10px); }
-.cart-list-leave-active { position: absolute; width: calc(100% - 2rem); }
-.navbar__cart-item { align-items: center; display: grid; gap: .5rem; grid-template-columns: 2.5rem minmax(0, 1fr) auto; }
-.navbar__cart-item img { aspect-ratio: 1; border-radius: .4rem; object-fit: cover; width: 2.5rem; }
-.navbar__cart-item-info { display: grid; gap: .15rem; min-width: 0; }
-.navbar__cart-item-info strong { font-size: .76rem; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.navbar__cart-item-info span { color: var(--muted); font-size: .7rem; }
-.navbar__remove-button { font-size: 1.2rem; line-height: 1; }
-.navbar__whatsapp { align-items: center; background: #168c4a; border-radius: .55rem; color: #fff; display: flex; font-size: .78rem; font-weight: 800; justify-content: space-between; min-height: 2.6rem; padding: .65rem .75rem; transition: background-color .2s ease, transform .15s ease; }
-.navbar__whatsapp:hover { background: #11763d; }
-.navbar__whatsapp:active { transform: scale(.98); }
-.navbar__whatsapp--disabled { cursor: not-allowed; opacity: .5; }
+/* ── Widget de Carrito para Desktop ─────────────────── */
+.navbar__desktop-cart-widget {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  padding: .85rem;
+  transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
 
+.navbar__desktop-cart-widget:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 4px 12px rgba(44, 42, 40, .06);
+  transform: translateY(-2px);
+}
+
+.navbar__desktop-cart-header {
+  align-items: center;
+  display: flex;
+  gap: .65rem;
+}
+
+.navbar__desktop-cart-icon-wrap {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--accent-strong);
+  display: flex;
+  height: 2.35rem;
+  justify-content: center;
+  position: relative;
+  width: 2.35rem;
+}
+
+.navbar__desktop-cart-badge {
+  background: var(--accent);
+  border-radius: 999px;
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 800;
+  padding: .1rem .35rem;
+  position: absolute;
+  right: -.25rem;
+  top: -.25rem;
+}
+
+.navbar__desktop-cart-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__desktop-cart-title {
+  color: var(--ink);
+  font-size: .88rem;
+  font-weight: 800;
+}
+
+.navbar__desktop-cart-sub {
+  color: var(--muted);
+  font-size: .75rem;
+}
+
+.navbar__desktop-cart-total {
+  align-items: center;
+  border-top: 1px dashed var(--line);
+  color: var(--ink);
+  display: flex;
+  font-size: .82rem;
+  justify-content: space-between;
+  padding-top: .45rem;
+}
+
+.navbar__desktop-cart-total strong {
+  color: var(--accent-strong);
+  font-size: .95rem;
+}
+
+.navbar__desktop-cart-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: .55rem;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  min-height: 2.2rem;
+  padding: .4rem;
+  transition: background-color .2s ease;
+  width: 100%;
+}
+
+.navbar__desktop-cart-btn:hover {
+  background: var(--accent-strong);
+}
+
+/* ── Navegación ─────────────────────────────────────── */
 .navbar__nav { display: grid; gap: .35rem; width: 100%; }
 
 .navbar__nav a {
@@ -190,10 +273,10 @@ const formatPrice = (price) =>
   color: var(--muted);
   font-size: .92rem;
   font-weight: 600;
-  min-height: 2.75rem;
+  min-height: 2.6rem;
   display: flex;
   align-items: center;
-  padding: .75rem 1rem;
+  padding: .65rem 1rem;
   position: relative;
   transition: background-color .2s ease, color .2s ease, padding-left .2s ease, transform .15s ease;
 }
@@ -215,15 +298,15 @@ const formatPrice = (price) =>
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* ── Mobile top bar ─────────────────────────────────── */
+/* ── Mobile top bar (Optimizado para no tapar la pantalla) ── */
 @media (max-width: 900px) {
   .navbar {
     animation: navbar-enter-mobile .3s ease-out both;
     box-shadow: 0 2px 14px rgba(44, 42, 40, .09);
     flex-direction: column;
-    gap: .65rem;
+    gap: .5rem;
     height: auto;
-    padding: .85rem 1rem .65rem;
+    padding: .65rem .85rem .5rem;
     position: sticky;
     top: 0;
     background: rgba(255, 255, 255, 0.96);
@@ -232,72 +315,142 @@ const formatPrice = (price) =>
     z-index: 50;
   }
 
+  .navbar__top-bar {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
   .navbar__brand {
     align-items: center;
     border-bottom: none;
     flex-direction: row;
-    gap: .85rem;
+    gap: .65rem;
     padding-bottom: 0;
     text-align: left;
   }
 
   .navbar__brand-text {
-    gap: .1rem;
+    gap: .05rem;
   }
 
-  /* Logo prominente en móvil */
   .navbar__logo {
     border: 2px solid var(--accent);
-    border-radius: .7rem;
-    box-shadow: 0 4px 12px rgba(44, 42, 40, .14);
-    height: 4.2rem;
-    width: 4.2rem;
-    padding: .2rem;
+    border-radius: .6rem;
+    box-shadow: 0 2px 8px rgba(44, 42, 40, .12);
+    height: 3.2rem;
+    width: 3.2rem;
+    padding: .15rem;
     flex-shrink: 0;
   }
 
   .navbar__store {
-    font-size: 1.05rem;
+    font-size: .95rem;
     font-weight: 800;
     line-height: 1.2;
   }
 
   .navbar__parish {
-    font-size: .78rem;
-    line-height: 1.25;
+    font-size: .72rem;
+    line-height: 1.2;
   }
 
-  .navbar__cart {
-    gap: .65rem;
-    padding: .8rem;
+  /* Ocultar el widget grande de desktop en móvil */
+  .navbar__desktop-cart-widget {
+    display: none;
   }
 
-  .navbar__cart-list { max-height: 14rem; }
-  .navbar__cart-item { grid-template-columns: 3rem minmax(0, 1fr) auto; }
-  .navbar__cart-item img { width: 3rem; }
-  .navbar__cart-item-info strong { font-size: .8rem; }
-  .navbar__cart-item-info span { font-size: .74rem; }
-  .navbar__whatsapp { min-height: 3rem; }
+  /* ── Botón Icono de Carrito para Móvil con Exponente ── */
+  .navbar__mobile-cart-btn {
+    align-items: center;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: .75rem;
+    box-shadow: 0 2px 8px rgba(44, 42, 40, .08);
+    color: var(--accent-strong);
+    cursor: pointer;
+    display: flex;
+    height: 3rem;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    width: 3rem;
+    flex-shrink: 0;
+    transition: transform .15s ease, background-color .15s ease, border-color .15s ease;
+  }
 
+  .navbar__mobile-cart-btn:active {
+    background: var(--soft-accent);
+    border-color: var(--accent);
+    transform: scale(.92);
+  }
+
+  .navbar__mobile-cart-svg {
+    stroke: var(--accent-strong);
+  }
+
+  /* Exponente flotante en la esquina superior derecha */
+  .navbar__mobile-cart-badge {
+    align-items: center;
+    background: #d9534f;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(217, 83, 79, .4);
+    color: #fff;
+    display: flex;
+    font-size: .68rem;
+    font-weight: 900;
+    height: 1.35rem;
+    justify-content: center;
+    min-width: 1.35rem;
+    padding: 0 .25rem;
+    position: absolute;
+    right: -.35rem;
+    top: -.35rem;
+  }
+
+  /* Animación pop al cambiar la cantidad del exponente */
+  .badge-pop-enter-active {
+    animation: badge-scale-in .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .badge-pop-leave-active {
+    animation: badge-scale-out .15s ease-in;
+  }
+
+  @keyframes badge-scale-in {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.25); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes badge-scale-out {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* Barra de enlaces horizontales */
   .navbar__nav {
     display: flex;
-    gap: .3rem;
+    gap: .25rem;
     overflow-x: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding-bottom: .2rem;
+    padding-bottom: .15rem;
+    width: 100%;
   }
   .navbar__nav::-webkit-scrollbar { display: none; }
 
   .navbar__nav a {
+    background: var(--canvas);
     border-radius: 999px;
     flex-shrink: 0;
-    font-size: .84rem;
-    min-height: 2.5rem;
-    padding: .5rem .95rem;
+    font-size: .78rem;
+    min-height: 2.2rem;
+    padding: .4rem .75rem;
     text-align: center;
     white-space: nowrap;
-    background: var(--canvas);
   }
 
   .navbar__nav a:active {
@@ -313,6 +466,11 @@ const formatPrice = (price) =>
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .navbar { animation: none; }
+  .navbar,
+  .badge-pop-enter-active,
+  .badge-pop-leave-active {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 </style>

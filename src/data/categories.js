@@ -1,4 +1,4 @@
-import logo from '../assets/logo.JPG'
+
 
 const productImages = import.meta.glob('../assets/Productos/*.*', { eager: true, import: 'default' })
 
@@ -8,24 +8,17 @@ function getProdImage(filename) {
 }
 
 export const categories = [
-  'Todos',
+ 
   'Hogar y Decoración',
   'Pines y Llaveros',
   'Pastilleros e Imanes',
   'Bolsos y Fundas',
-  'Librería y Devoción',
+   'Librería y Devoción',
+   'Todos',
 ]
 
 export const categoryDrawers = [
-  {
-    id: 'todos',
-    nombre: 'Todos',
-    titulo: 'Todos los Productos',
-    descripcion: 'Colección completa de 60 artículos de la parroquia',
-    imagen: logo,
-    total: 60,
-    etiqueta: '60 artículos',
-  },
+ 
   {
     id: 'hogar',
     nombre: 'Hogar y Decoración',
@@ -62,7 +55,7 @@ export const categoryDrawers = [
     total: 6,
     etiqueta: '6 productos',
   },
-  {
+   {
     id: 'libreria',
     nombre: 'Librería y Devoción',
     titulo: 'Librería y Devoción',
@@ -70,5 +63,15 @@ export const categoryDrawers = [
     imagen: getProdImage('PortaBiblia.jpeg'),
     total: 8,
     etiqueta: '8 productos',
+  },
+  {
+    
+    id: 'todos',
+    nombre: 'Todos',
+    titulo: 'Todos los Productos',
+    descripcion: 'Colección completa de 60 artículos de la parroquia',
+    imagen: getProdImage('articulos.jpg'),
+    total: 60,
+    etiqueta: '60 artículos',
   },
 ]

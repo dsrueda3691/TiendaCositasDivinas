@@ -1,71 +1,64 @@
 <template>
-  <section id="categorias" class="category-drawers-section" aria-label="Cajones de categorías">
-    <div class="category-drawers__header">
+  <section id="categorias" class="seccion-cajones-categorias" aria-label="Cajones de categorías">
+    <div class="cajones-categorias__encabezado">
       <div>
-        <span class="category-drawers__eyebrow">Categorías de la Tienda</span>
-        <h2 class="category-drawers__title">Cajones de Categorías</h2>
+        <span class="cajones-categorias__antetitulo">Categorías de la Tienda</span>
+        <h2 class="cajones-categorias__titulo">Articulos Por Categorías</h2>
       </div>
-      <p class="category-drawers__subtitle">
-        Toca cualquier cajón para desplegar su colección de productos.
+      <p class="cajones-categorias__subtitulo">
+        Toca cualquier Categoria para desplegar su colección de productos.
       </p>
     </div>
 
-    <!-- Cuadrícula de Cajones / Cards de Categorías -->
-    <div class="category-drawers__grid" role="group" aria-label="Cajones de categorías">
+    
+    <div class="cajones-categorias__cuadricula" role="group" aria-label="Cajones de categorías">
       <article
-        v-for="drawer in categoryDrawers"
-        :key="drawer.id"
-        class="category-drawer-card"
+        v-for="cajon in categoryDrawers"
+        :key="cajon.id"
+        class="tarjeta-cajon-categoria"
         :class="{
-          'category-drawer-card--active': drawer.nombre === selectedCategory && isDrawerOpen,
+          'tarjeta-cajon-categoria--activa': cajon.nombre === selectedCategory && isDrawerOpen,
         }"
-        :aria-expanded="drawer.nombre === selectedCategory && isDrawerOpen"
+        :aria-expanded="cajon.nombre === selectedCategory && isDrawerOpen"
         tabindex="0"
         role="button"
-        @click="handleClick(drawer.nombre)"
-        @keydown.enter="handleClick(drawer.nombre)"
-        @keydown.space.prevent="handleClick(drawer.nombre)"
+        @click="manejarClicCajon(cajon.nombre)"
+        @keydown.enter="manejarClicCajon(cajon.nombre)"
+        @keydown.space.prevent="manejarClicCajon(cajon.nombre)"
       >
-        <div class="category-drawer-card__image-container">
+        <div class="tarjeta-cajon-categoria__contenedor-imagen">
           <img
-            :src="drawer.imagen"
-            :alt="drawer.titulo"
-            class="category-drawer-card__image"
+            :src="cajon.imagen"
+            :alt="cajon.titulo"
+            class="tarjeta-cajon-categoria__imagen"
             loading="lazy"
             decoding="async"
           />
-          <span class="category-drawer-card__badge">{{ drawer.etiqueta }}</span>
+          <span class="tarjeta-cajon-categoria__insignia">{{ cajon.etiqueta }}</span>
 
           <span
-            v-if="drawer.nombre === selectedCategory && isDrawerOpen"
-            class="category-drawer-card__open-pill"
+            v-if="cajon.nombre === selectedCategory && isDrawerOpen"
+            class="tarjeta-cajon-categoria__pildora-abierto"
           >
             Abierto
           </span>
         </div>
 
-        <div class="category-drawer-card__content">
-          <div class="category-drawer-card__info">
-            <h3 class="category-drawer-card__name">{{ drawer.titulo }}</h3>
-            <p class="category-drawer-card__desc">{{ drawer.descripcion }}</p>
+        <div class="tarjeta-cajon-categoria__contenido">
+          <div class="tarjeta-cajon-categoria__informacion">
+            <h3 class="tarjeta-cajon-categoria__nombre">{{ cajon.titulo }}</h3>
+            <p class="tarjeta-cajon-categoria__descripcion">{{ cajon.descripcion }}</p>
           </div>
 
-          <div class="category-drawer-card__footer">
-            <span class="category-drawer-card__action-text">
-              {{ drawer.nombre === selectedCategory && isDrawerOpen ? 'Cajón desplegado' : 'Desplegar cajón' }}
+          <div class="tarjeta-cajon-categoria__pie">
+            <span class="tarjeta-cajon-categoria__texto-accion">
+              {{ cajon.nombre === selectedCategory && isDrawerOpen ? 'Categoría desplegada' : 'Desplegar Categoria' }}
             </span>
-            <span class="category-drawer-card__action-arrow" aria-hidden="true">
-              {{ drawer.nombre === selectedCategory && isDrawerOpen ? '▲' : '▼' }}
+            <span class="tarjeta-cajon-categoria__flecha-accion" aria-hidden="true">
+              {{ cajon.nombre === selectedCategory && isDrawerOpen ? '▲' : '▼' }}
             </span>
           </div>
         </div>
-
-        <!-- Flecha indicadora inferior que conecta con la sección desplegada -->
-        <div
-          v-if="drawer.nombre === selectedCategory && isDrawerOpen"
-          class="category-drawer-card__pointer"
-          aria-hidden="true"
-        ></div>
       </article>
     </div>
   </section>
@@ -83,19 +76,19 @@ const props = defineProps({
 
 const emit = defineEmits(['select-category', 'select-sort', 'toggle-drawer'])
 
-function handleClick(category) {
-  if (category === props.selectedCategory) {
+function manejarClicCajon(categoria) {
+  if (categoria === props.selectedCategory) {
     emit('toggle-drawer')
   } else {
-    emit('select-category', category)
+    emit('select-category', categoria)
   }
 }
 </script>
 
 <style>
-/* ── Category Drawers Section ───────────────────────── */
-.category-drawers-section {
-  animation: drawers-enter .35s ease-out both;
+/* ── Sección de Cajones de Categorías ───────────────── */
+.seccion-cajones-categorias {
+  animation: animacion-entrada-cajones .35s ease-out both;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 1.25rem;
@@ -104,14 +97,14 @@ function handleClick(category) {
   padding: 1.5rem;
 }
 
-.category-drawers__header {
+.cajones-categorias__encabezado {
   display: flex;
   flex-direction: column;
   gap: .25rem;
   margin-bottom: 1.25rem;
 }
 
-.category-drawers__eyebrow {
+.cajones-categorias__antetitulo {
   color: var(--accent);
   font-size: .75rem;
   font-weight: 800;
@@ -119,30 +112,29 @@ function handleClick(category) {
   text-transform: uppercase;
 }
 
-.category-drawers__title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.7rem;
+.cajones-categorias__titulo {
+  font-size: 1.35rem;
   font-weight: 800;
   line-height: 1.2;
   margin: .2rem 0;
   color: var(--ink);
 }
 
-.category-drawers__subtitle {
+.cajones-categorias__subtitulo {
   color: var(--muted);
   font-size: .92rem;
   margin: 0;
 }
 
-/* ── Grid of Drawer Cards ───────────────────────────── */
-.category-drawers__grid {
+/* ── Cuadrícula de Tarjetas de Cajón ────────────────── */
+.cajones-categorias__cuadricula {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* ── Drawer Card ────────────────────────────────────── */
-.category-drawer-card {
+/* ── Tarjeta de Cajón ───────────────────────────────── */
+.tarjeta-cajon-categoria {
   background: var(--canvas);
   border: 2px solid transparent;
   border-radius: 1rem;
@@ -158,63 +150,50 @@ function handleClick(category) {
   user-select: none;
 }
 
-@supports (animation-timeline: view()) {
-  .category-drawer-card {
-    animation: category-scroll-reveal .55s cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 24%;
-  }
-}
-
-@keyframes category-scroll-reveal {
-  from { opacity: 0; transform: translateY(20px) scale(.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
 @media (hover: hover) {
-  .category-drawer-card:hover {
+  .tarjeta-cajon-categoria:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 24px rgba(44, 42, 40, .1);
     border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   }
 
-  .category-drawer-card:hover .category-drawer-card__image {
+  .tarjeta-cajon-categoria:hover .tarjeta-cajon-categoria__imagen {
     transform: scale(1.06);
   }
 }
 
-.category-drawer-card:active {
+.tarjeta-cajon-categoria:active {
   transform: scale(.97);
 }
 
 /* Estado activo / abierto */
-.category-drawer-card--active {
-  background: var(--surface);
+.tarjeta-cajon-categoria--activa {
+  background: #fff;
   border-color: var(--accent) !important;
-  box-shadow: 0 8px 24px rgba(74, 52, 40, .2);
+  box-shadow: 0 8px 24px rgba(138, 93, 73, .22);
 }
 
-.category-drawer-card--active .category-drawer-card__footer {
+.tarjeta-cajon-categoria--activa .tarjeta-cajon-categoria__pie {
   background: var(--accent);
   color: #fff;
 }
 
-.category-drawer-card--active .category-drawer-card__action-text,
-.category-drawer-card--active .category-drawer-card__action-arrow {
+.tarjeta-cajon-categoria--activa .tarjeta-cajon-categoria__texto-accion,
+.tarjeta-cajon-categoria--activa .tarjeta-cajon-categoria__flecha-accion {
   color: #fff;
   font-weight: 800;
 }
 
-/* ── Image & Badges ─────────────────────────────────── */
-.category-drawer-card__image-container {
+/* ── Imagen e Insignias ─────────────────────────────── */
+.tarjeta-cajon-categoria__contenedor-imagen {
   aspect-ratio: 16 / 10;
-  background: var(--beige);
+  background: #e7e2db;
   overflow: hidden;
   position: relative;
   width: 100%;
 }
 
-.category-drawer-card__image {
+.tarjeta-cajon-categoria__imagen {
   display: block;
   height: 100%;
   object-fit: cover;
@@ -222,7 +201,7 @@ function handleClick(category) {
   width: 100%;
 }
 
-.category-drawer-card__badge {
+.tarjeta-cajon-categoria__insignia {
   background: rgba(44, 42, 40, .75);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -237,7 +216,7 @@ function handleClick(category) {
   letter-spacing: .02em;
 }
 
-.category-drawer-card__open-pill {
+.tarjeta-cajon-categoria__pildora-abierto {
   background: var(--accent);
   border-radius: 999px;
   color: #fff;
@@ -250,31 +229,27 @@ function handleClick(category) {
   box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
 }
 
-/* ── Card Body ──────────────────────────────────────── */
-.category-drawer-card__content {
+/* ── Contenido de la Tarjeta ────────────────────────── */
+.tarjeta-cajon-categoria__contenido {
   display: flex;
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.category-drawer-card__info {
-  background: #eee5d5;
-  border-bottom: 1px solid color-mix(in srgb, var(--accent-strong) 14%, transparent);
-  min-height: 6rem;
+.tarjeta-cajon-categoria__informacion {
   padding: .85rem 1rem .65rem;
 }
 
-.category-drawer-card__name {
+.tarjeta-cajon-categoria__nombre {
   color: var(--ink);
-  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.05rem;
   font-weight: 800;
   line-height: 1.25;
   margin: 0 0 .25rem;
 }
 
-.category-drawer-card__desc {
+.tarjeta-cajon-categoria__descripcion {
   color: var(--muted);
   font-size: .82rem;
   line-height: 1.4;
@@ -285,10 +260,10 @@ function handleClick(category) {
   overflow: hidden;
 }
 
-/* ── Card Footer / Action Button ────────────────────── */
-.category-drawer-card__footer {
+/* ── Pie de la Tarjeta ──────────────────────────────── */
+.tarjeta-cajon-categoria__pie {
   align-items: center;
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
@@ -297,107 +272,101 @@ function handleClick(category) {
   transition: background-color .2s ease, color .2s ease;
 }
 
-.category-drawer-card__action-text {
+.tarjeta-cajon-categoria__texto-accion {
   color: var(--accent-strong);
   font-size: .8rem;
   font-weight: 700;
 }
 
-.category-drawer-card__action-arrow {
+.tarjeta-cajon-categoria__flecha-accion {
   color: var(--accent-strong);
   font-size: .75rem;
   transition: transform .2s ease;
 }
 
-/* ── Pointer Triangle on Desktop ────────────────────── */
-.category-drawer-card__pointer {
-  display: none;
-}
-
-@keyframes drawers-enter {
+@keyframes animacion-entrada-cajones {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Tablet: 2 Columns ──────────────────────────────── */
+/* ── Tablet: 2 Columnas ──────────────────────────────── */
 @media (max-width: 900px) {
-  .category-drawers-section {
+  .seccion-cajones-categorias {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
   }
 
-  .category-drawers__grid {
+  .cajones-categorias__cuadricula {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .85rem;
   }
 }
 
-/* ── Mobile: 2 Compact Columns ──────────────────────── */
+/* ── Móvil: 2 Columnas Compactas ─────────────────────── */
 @media (max-width: 560px) {
-  .category-drawers-section {
+  .seccion-cajones-categorias {
     border-radius: 1rem;
     padding: 1rem .85rem;
     margin-bottom: 1.25rem;
   }
 
-  .category-drawers__title {
+  .cajones-categorias__titulo {
     font-size: 1.15rem;
   }
 
-  .category-drawers__subtitle {
+  .cajones-categorias__subtitulo {
     font-size: .82rem;
   }
 
-  .category-drawers__grid {
+  .cajones-categorias__cuadricula {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .65rem;
   }
 
-  .category-drawer-card__image-container {
+  .tarjeta-cajon-categoria__contenedor-imagen {
     aspect-ratio: 4 / 3;
   }
 
-  .category-drawer-card__info {
-    min-height: 4.25rem;
+  .tarjeta-cajon-categoria__informacion {
     padding: .65rem .65rem .45rem;
   }
 
-  .category-drawer-card__name {
+  .tarjeta-cajon-categoria__nombre {
     font-size: .88rem;
   }
 
-  .category-drawer-card__desc {
-    display: none; /* Keep mobile cards clean and compact */
+  .tarjeta-cajon-categoria__descripcion {
+    display: none;
   }
 
-  .category-drawer-card__badge {
+  .tarjeta-cajon-categoria__insignia {
     font-size: .62rem;
     left: .4rem;
     top: .4rem;
     padding: .15rem .4rem;
   }
 
-  .category-drawer-card__open-pill {
+  .tarjeta-cajon-categoria__pildora-abierto {
     font-size: .62rem;
     right: .4rem;
     top: .4rem;
     padding: .15rem .4rem;
   }
 
-  .category-drawer-card__footer {
+  .tarjeta-cajon-categoria__pie {
     min-height: 2rem;
     padding: .35rem .65rem;
   }
 
-  .category-drawer-card__action-text {
+  .tarjeta-cajon-categoria__texto-accion {
     font-size: .72rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .category-drawers-section,
-  .category-drawer-card,
-  .category-drawer-card__image {
+  .seccion-cajones-categorias,
+  .tarjeta-cajon-categoria,
+  .tarjeta-cajon-categoria__imagen {
     transition: none !important;
     animation: none !important;
   }

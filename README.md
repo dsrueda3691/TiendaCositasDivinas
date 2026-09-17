@@ -1,85 +1,65 @@
 # ⛪ Catálogo Digital — Tienda Cositas Divinas
 > **Parroquia de la Santa Cruz**  
-> Aplicación web moderna, interactiva y optimizada al 100% para dispositivos móviles (Mobile-First) desarrollada con **Vue 3** y **Vite**.
+> Aplicación web moderna, interactiva y optimizada al 100% para dispositivos móviles (*Mobile-First*) desarrollada con **Vue 3** y **Vite**.
 
 ![Vue.js](https://img.shields.io/badge/Vue.js-3.x-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-Modern_Flex_&_Grid-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![WhatsApp](https://img.shields.io/badge/WhatsApp-Orders-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)
 ![Mobile First](https://img.shields.io/badge/UX-Mobile--First-FF6B6B?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-CSP%20%7C%20HSTS%20%7C%20SSL-blue?style=for-the-badge)
 
 ---
 
 ## 📖 Descripción del Proyecto
 
-Este proyecto es el catálogo digital oficial de la **Tienda Cositas Divinas**, perteneciente a la **Parroquia de la Santa Cruz**. Permite a los feligreses y visitantes explorar de manera rápida, fluida e intuitiva una variedad de 60 artículos religiosos, regalos y detalles para el hogar divididos en cajones de categorías interactivos.
+Este proyecto es el catálogo digital oficial de la **Tienda Cositas Divinas**, perteneciente a la **Parroquia de la Santa Cruz**. Permite a los feligreses y visitantes explorar de manera rápida, fluida e intuitiva una variedad de 60 artículos religiosos, regalos y detalles para el hogar divididos en cajones de categorías interactivos, con carrito de compras y pedido directo por **WhatsApp**.
 
-La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la velocidad de carga, la ergonomía táctil en smartphones y transiciones suaves inspiradas en aplicaciones nativas para iOS y Android.
+> **Misión Evangelizadora y Social:**  
+> *"Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción. Al adquirir nuestros productos, no solo llevas contigo un artículo especial, sino que también contribuyes a la recaudación de fondos para la organización del **XII Retiro de Emaús Mujeres**."*
 
 ---
 
 ## ✨ Características Principales
 
-### 🗄️ Categorías en Cajones Tipo Card con Sección Desplegable
-- **Cajones interactivos**: Cada categoría se presenta como una tarjeta o "cajón" visual con:
-  - Fotografía representativa del catálogo.
-  - Etiqueta con el número de productos disponibles.
-  - Título y descripción de la colección.
-  - Botón de acción integrado "Desplegar cajón ▼" (o "Cajón desplegado ▲").
-  - Estado visual activo con borde de acento, sombra cálida e indicador de apertura.
-- **Sección de productos desplegable**: Al tocar cualquier cajón, se abre suavemente la sección `#productos` con:
-  - Banner superior indicando el cajón activo y cantidad de productos.
-  - Selector de ordenamiento dinámico.
-  - Botón para cerrar o contraer el cajón (`Cerrar cajón ✕`).
-  - Desplazamiento automático suave hacia la sección desplegada en dispositivos móviles.
+### 🛒 Carrito de Compras Móvil con Icono y Exponente
+- **Icono compacto en móvil**: En pantallas de teléfono, el carrito no obstruye la pantalla ni bloquea la visualización de los artículos; se ubica como un icono estilizado en la barra superior.
+- **Exponente dinámico (*Badge*)**: Muestra en tiempo real la cantidad total acumulada de artículos seleccionados con micro-animaciones al añadir unidades.
+- **Cajón desplegable (*Bottom Sheet* / Drawer)**: Al presionar el icono, se despliega una interfaz fluida desde la parte inferior que incluye:
+  - Imagen, nombre, categoría y precio unitario de cada producto.
+  - Controles de cantidad (`−` y `+`) con actualización instantánea y botón de eliminación.
+  - Cálculo automático del total en Pesos Colombianos (COP).
+  - Botón de acción directa hacia WhatsApp con el pedido listo.
+- **Persistencia en `localStorage`**: La selección del usuario permanece guardada si se recarga la página o se navega entre aplicaciones.
 
-### 📱 Optimización Mobile-First de Alto Nivel
-- **Barra de navegación fija (*sticky*)**: Con efecto de desenfoque translúcido (*glassmorphism / backdrop-blur*), logo parroquial visible de 4.2rem y enlaces con desplazamiento horizontal.
-- **Cuadrícula de cajones adaptativa**: 3 columnas en escritorio, 2 en tablet y 2 columnas compactas en móvil para no sobrecargar la pantalla.
-- **Dimensiones táctiles recomendadas (≥ 44px)**: Todos los botones, filtros y selectores cumplen con los estándares de accesibilidad para pulsación cómoda con los dedos.
-- **Prevención de comportamientos indeseados**:
-  - Se eliminó el destello azul de toque en móviles (`-webkit-tap-highlight-color: transparent`).
-  - Desactivado el zoom accidental por doble pulsación (`touch-action: manipulation`).
-  - Prevención de desborde y recarga accidental (*pull-to-refresh* con `overscroll-behavior-y: contain`).
+### 💬 Pedidos Directos por WhatsApp (+57 301 7705554)
+- Al hacer clic en **"Consultar disponibilidad / Comprar"**, se abre automáticamente una conversación en WhatsApp dirigida al número **`+57 301 7705554`**.
+- El mensaje prediseñado incluye:
+  - Saludo cordial e identificación de la tienda parroquial.
+  - Mención al propósito del XII Retiro de Emaús Mujeres.
+  - Lista estructurada con cantidades, nombres de productos, precios y referencias.
+  - Total de la compra y solicitud de instrucciones de entrega y métodos de pago.
 
-### 🎭 Animaciones y Micro-interacciones
-- **Despliegue fluido (*Drawer Expand*)**: Al abrir o cerrar un cajón, la sección se desliza con suavidad hacia abajo/arriba.
-- **Transición suave entre colecciones (*Cross-fade & Slide*)**: Al cambiar de cajón o página, el catálogo actual se desvanece suavemente y los nuevos productos entran sin parpadeos ni choques de maquetación.
-- **Entrada escalonada (*Staggered Entry*)**: Las tarjetas de productos aparecen en cascada progresiva para una sensación visual elegante y dinámica.
-- **Componente de Detalles (Modal & Bottom Sheet)**:
-  - **En móviles**: Se despliega desde abajo hacia arriba como un *bottom-sheet* nativo con tirador táctil (*drag handle*), cerrándose con un deslizamiento continuo hacia abajo (sin cortes instantáneos).
-  - **En computadoras de escritorio**: Se abre como panel lateral desde la derecha con desenfoque de fondo (*backdrop blur*).
-  - **Bloqueo de scroll seguro**: Al abrirse el modal se desactiva el scroll del fondo sin generar saltos de pantalla.
-- **Hover inteligente**: Los efectos flotantes y elevaciones solo se activan en dispositivos con puntero/ratón (`@media (hover: hover)`), evitando anomalías visuales durante el desplazamiento táctil.
+### 🗄️ Categorías en Cajones Interactivos Tipo Card
+- Cada categoría se presenta como una tarjeta elegante con imagen representativa, contador de productos, título, descripción y botón para desplegar.
+- Al seleccionar una categoría, la sección `#productos` se expande con desplazamiento suave e inteligente.
 
-### 🛍️ Catálogo y Gestión de Productos
-- **60 productos reales catalogados** con sus respectivas imágenes de alta calidad optimizadas en peso.
-- **6 cajones temáticos**:
-  1. `Todos los Productos`: Colección completa de los 60 artículos de la parroquia.
-  2. `Hogar y Decoración`: Adornos, colgantes de puerta, cruces, placas de pared, delantales y letreros (13 productos).
-  3. `Pines y Llaveros`: Pines devocionales de metal esmaltado, medallas y llaveros de San Benito (16 productos).
-  4. `Pastilleros e Imanes`: Pastilleros metálicos de bolsillo e imanes para nevera (17 productos).
-  5. `Bolsos y Fundas`: Bolsos de tela, tote bags, fundas de almohada y cargadores (6 productos).
-  6. `Librería y Devoción`: Porta Biblias, pestañas separadoras, marcapáginas y stickers (8 productos).
-- **Ordenamiento dinámico**:
-  - Recomendados.
-  - Precio: Menor a Mayor.
-  - Precio: Mayor a Menor.
-  - Nombre: A a Z.
-  - Nombre: Z a A.
-- **Paginación táctil**: Botones anterior/siguiente y ventana adaptativa de números de página.
-- **Carga diferida (*Lazy Loading*)**: Las imágenes se cargan a medida que el usuario se desplaza, reduciendo el consumo de datos móviles.
+### � Mayor Capacidad de Visualización
+- **Escritorio**: Hasta **24 productos por página** para una navegación amplia y continua.
+- **Móviles**: Hasta **16 productos por página**, optimizando la velocidad de carga y reduciendo la necesidad de paginación constante.
 
----
+### 🛡️ Seguridad, Privacidad y Cifrado SSL/TLS
+- **Cifrado HTTPS obligatorio**: Implementación de `upgrade-insecure-requests` en la directiva CSP para garantizar que todas las conexiones viajen encriptadas con SSL/TLS.
+- **Content Security Policy (CSP)**: Protección contra ataques de inyección de código (XSS), restringiendo la ejecución y carga de recursos únicamente a fuentes autorizadas y seguras (Google Fonts, Unsplash, WhatsApp).
+- **Cabeceras de respuesta seguras**:
+  - `Strict-Transport-Security (HSTS)`: Obliga al navegador a usar HTTPS de forma estricta (`max-age=63072000; includeSubDomains; preload`).
+  - `X-Content-Type-Options: nosniff`: Previene ataques basados en confusión de tipos MIME.
+  - `X-Frame-Options: SAMEORIGIN`: Protege contra ataques de *clickjacking* o incrustaciones no autorizadas en iframes.
+  - `Permissions-Policy`: Restringe el acceso innecesario a hardware del dispositivo (cámara, micrófono, geolocalización).
+- **Archivos listos para producción**: Incluye `vercel.json` y `public/_headers` (Netlify / Cloudflare Pages) preconfigurados.
+- **Arquitectura estática segura**: Al ser una aplicación cliente sin base de datos SQL en el servidor, existe **cero riesgo de inyección SQL**.
 
-## 🛠️ Tecnologías Utilizadas
-
-- **[Vue 3](https://vuejs.org/)**: Framework progresivo de JavaScript utilizando la **Composition API** con la sintaxis concisa de `<script setup>`.
-- **[Vite](https://vitejs.dev/)**: Herramienta de compilación ultrarrápida para desarrollo local instantáneo y empaquetado optimizado para producción.
-- **CSS Moderno**:
-  - Variables CSS (*Custom Properties*) para consistencia en la paleta de colores.
-  - CSS Grid y Flexbox responsivos.
-  - Animaciones aceleradas por hardware (GPU) con `transform` y `opacity`.
-- **Importación dinámica de activos**: `import.meta.glob` para procesamiento y versionado automático de las 60 imágenes de productos.
+### 🇪🇸 Estandarización de Código en Español
+- Toda la base del código (nombres de clases CSS, funciones, estados reactivos del composable `useCart.js`, métodos y transiciones) está estandarizada en idioma español, facilitando el mantenimiento y la comprensión del proyecto.
 
 ---
 
@@ -88,106 +68,90 @@ La interfaz fue diseñada con una filosofía **Mobile-First**, priorizando la ve
 ```text
 Catalogo/
 ├── .gitignore                     # Archivos y carpetas ignorados por git
-├── index.html                     # Entrada HTML con metadatos móviles y prefetch
-├── package.json                   # Dependencias y scripts de ejecución
-├── README.md                      # Documentación del proyecto
-├── vite.config.js                 # Configuración de Vite y plugin de Vue
+├── index.html                     # HTML principal con CSP, HSTS y metadatos móviles
+├── package.json                   # Dependencias y scripts del proyecto
+├── README.md                      # Documentación completa del proyecto
+├── vercel.json                    # Cabeceras de seguridad para despliegues en Vercel
+├── vite.config.js                 # Configuración del empaquetador Vite
+├── public/
+│   └── _headers                   # Cabeceras de seguridad para Netlify y Cloudflare
 └── src/
-    ├── App.vue                    # Componente raíz (layout general)
-    ├── main.js                    # Punto de entrada de la aplicación
+    ├── App.vue                    # Componente raíz de la aplicación
+    ├── main.js                    # Punto de entrada de Vue 3
     ├── assets/
-    │   ├── logo.JPG               # Logo de la Parroquia de la Santa Cruz
-    │   ├── main.css               # Estilos globales y utilidades móviles
-    │   ├── base.css               # Variables base del sistema de diseño
-    │   └── Productos/             # 60 imágenes de los productos del catálogo
+    │   ├── logo.JPG               # Escudo oficial de la Parroquia
+    │   ├── main.css               # Estilos globales, variables y utilidades móviles
+    │   ├── base.css               # Paleta de colores y tipografía base
+    │   └── Productos/             # Fotografías originales de los productos
+    ├── composables/
+    │   └── useCart.js             # Estado global del carrito y generador de pedidos WhatsApp
     ├── components/
+    │   ├── cart/
+    │   │   └── CartDrawer.vue     # Cajón deslizable y modal del carrito de compras
     │   ├── layout/
-    │   │   └── Navbar.vue         # Barra de navegación (sidebar en PC, sticky en móvil)
+    │   │   └── Navbar.vue         # Barra de navegación superior con icono de carrito
     │   └── catalog/
-    │       ├── CatalogFilters.vue # Cajones de categorías tipo card con disparador
-    │       ├── ProductCard.vue    # Tarjeta de producto y modal de detalles (bottom sheet)
-    │       ├── ProductGrid.vue    # Cuadrícula responsiva con entrada escalonada
-    │       └── SortSelect.vue     # Componente modular de ordenamiento
+    │       ├── CatalogFilters.vue # Cajones de categorías tipo card
+    │       ├── ProductCard.vue    # Tarjeta de producto y modal de detalles ampliado
+    │       ├── ProductGrid.vue    # Cuadrícula adaptable de productos
+    │       └── SortSelect.vue     # Selector de ordenamiento (precio, nombre)
     ├── data/
-    │   ├── categories.js          # Metadatos e imágenes de los cajones de categorías
-    │   └── products.js            # Base de datos de los 60 productos con imágenes y precios
+    │   ├── categories.js          # Datos y descripciones de las categorías
+    │   └── products.js            # Base de 60 productos catalogados
     └── views/
-        └── CatalogView.vue        # Vista principal: coordina cajones, sección desplegada y paginación
+        └── CatalogView.vue        # Vista principal con banner de misión y catálogo
 ```
 
 ---
 
-## 🚀 Instalación y Puesta en Marcha
+## 🚀 Instalación y Desarrollo Local
 
 ### Prerrequisitos
-Asegúrate de tener instalado **[Node.js](https://nodejs.org/)** (versión 18 o superior recomendada).
+- **Node.js**: v18.0.0 o superior
+- **npm**: v9.0.0 o superior
 
-### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
-cd TU_REPOSITORIO
-```
+# 1. Clonar el repositorio
+git clone https://github.com/dsrueda3691/TiendaCositasDivinas.git
+cd TiendaCositasDivinas
 
-### 2. Instalar las dependencias
-```bash
+# 2. Instalar dependencias
 npm install
-```
 
-### 3. Iniciar el servidor de desarrollo
-```bash
+# 3. Iniciar el servidor local de desarrollo
 npm run dev
-```
-La aplicación se iniciará en `http://localhost:5173/` (o el puerto disponible que indique la consola).
 
-### 4. Compilar para producción
-```bash
+# 4. Compilar para producción (genera la carpeta dist/)
 npm run build
-```
-Generará los archivos listos para despliegue en la carpeta `/dist` (comprimidos y con *hash* de caché).
 
-### 5. Previsualizar la versión de producción localmente
-```bash
+# 5. Previsualizar la compilación de producción localmente
 npm run preview
 ```
 
 ---
 
-## 📤 Guía para Subir a GitHub
+## 🌐 Despliegue en Producción y Protección WAF
 
-Si aún no has vinculado tu proyecto a GitHub, sigue estos pasos desde la terminal en la raíz del proyecto:
+Para alojar esta página en la web con certificado SSL y firewall WAF gratuito:
+
+1. **Alojamiento con SSL automático (HTTPS)**:
+   - Conectar el repositorio de GitHub a [Vercel](https://vercel.com) o [Netlify](https://netlify.com).
+   - El certificado SSL/TLS de Let's Encrypt se activará y renovará de forma **100% automática y gratuita**.
+   - Las cabeceras de seguridad de `vercel.json` o `public/_headers` se aplicarán automáticamente.
+
+2. **Firewall WAF y Anti-DDoS (Opcional recomendado)**:
+   - Para añadir una capa extra de protección contra tráfico malicioso, bots y ataques DDoS de capa 7, se puede conectar el dominio a **Cloudflare (Plan Gratuito)**.
+   - Cloudflare funcionará como un escudo WAF global y optimizará la entrega de imágenes a través de su CDN.
+
+---
+
+## 📤 Control de Versiones
 
 ```bash
-# 1. Inicializar el repositorio Git (si no está inicializado)
-git init
-
-# 2. Agregar todos los archivos al seguimiento
+# Registrar cambios y confirmar
 git add .
+git commit -m "docs: actualizar documentacion en espanol con politicas de seguridad y visualizacion"
 
-# 3. Crear el commit
-git commit -m "feat: categorías en cajones tipo card con sección desplegable"
-
-# 4. Cambiar a la rama principal
-git branch -M main
-
-# 5. Conectar con tu repositorio remoto de GitHub
-git remote add origin https://github.com/dsrueda3691/TiendaCositasDivinas.git
-
-# 6. Subir el proyecto a GitHub (usa --force si GitHub tenía un README inicial vacío)
-git push -u origin main --force
+# Subir a la rama principal
+git push origin main
 ```
-
----
-
-## 🌐 Despliegue en la Web (Hosting Gratuito)
-
-Este proyecto puede desplegarse en segundos en cualquiera de las siguientes plataformas:
-
-- **[Vercel](https://vercel.com/)**: Conecta tu repositorio de GitHub, selecciona el framework *Vite* y presiona **Deploy**.
-- **[Netlify](https://www.netlify.com/)**: Conecta tu repositorio, configura como Build command `npm run build` y Publish directory `dist`.
-- **[GitHub Pages](https://pages.github.com/)**: Requiere configurar la propiedad `base` en `vite.config.js` (`base: './'`).
-
----
-
-## 📄 Licencia
-
-Este proyecto fue desarrollado para la **Tienda Cositas Divinas** de la **Parroquia de la Santa Cruz**. Todos los derechos sobre las marcas y fotografías pertenecen a la parroquia. Código abierto bajo licencia [MIT](LICENSE).

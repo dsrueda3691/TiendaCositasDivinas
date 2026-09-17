@@ -1,15 +1,17 @@
 <template>
-  <div class="product-grid">
+  <div class="cuadricula-productos">
     <ProductCard
-      v-for="(product, index) in products"
-      :key="product.id"
-      :product="product"
-      class="product-grid__item"
-      :style="{ '--product-delay': `${Math.min(index * 28, 220)}ms` }"
+      v-for="(producto, indice) in products"
+      :key="producto.id"
+      :product="producto"
+      class="cuadricula-productos__articulo"
+      :style="{ '--retraso-producto': `${Math.min(indice * 28, 220)}ms` }"
       @add-to-cart="$emit('add-to-cart', $event)"
       @set-cart-quantity="$emit('set-cart-quantity', $event)"
     />
-    <p v-if="!products.length" class="product-grid__empty">No hay productos en esta categoría.</p>
+    <p v-if="!products.length" class="cuadricula-productos__vacio">
+      No hay productos en esta categoría.
+    </p>
   </div>
 </template>
 
@@ -24,14 +26,14 @@ defineEmits(['add-to-cart', 'set-cart-quantity'])
 </script>
 
 <style>
-.product-grid {
+.cuadricula-productos {
   display: grid;
   gap: 1.25rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
 }
 
-.product-grid__empty {
+.cuadricula-productos__vacio {
   color: var(--muted);
   grid-column: 1 / -1;
   padding: 3rem 1rem;
@@ -39,14 +41,14 @@ defineEmits(['add-to-cart', 'set-cart-quantity'])
   font-size: 1rem;
 }
 
-/* ── Card staggered cascade ─────────────────────────── */
-.product-grid__item {
-  animation: card-enter .32s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: var(--product-delay, 0ms);
+/* ── Entrada en cascada escalonada ──────────────────── */
+.cuadricula-productos__articulo {
+  animation: animacion-entrada-tarjeta .32s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--retraso-producto, 0ms);
   will-change: transform, opacity;
 }
 
-@keyframes card-enter {
+@keyframes animacion-entrada-tarjeta {
   from {
     opacity: 0;
     transform: translateY(14px) scale(.98);
@@ -57,24 +59,24 @@ defineEmits(['add-to-cart', 'set-cart-quantity'])
   }
 }
 
-/* ── Tablet: 2 columns ──────────────────────────────── */
+/* ── Tablet: 2 columnas ──────────────────────────────── */
 @media (max-width: 900px) {
-  .product-grid {
+  .cuadricula-productos {
     gap: 1rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* ── Phone: 2 columns, tighter gap ──────────────────── */
+/* ── Teléfono: 2 columnas compactas ──────────────────── */
 @media (max-width: 560px) {
-  .product-grid {
+  .cuadricula-productos {
     gap: .65rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-grid__item {
+  .cuadricula-productos__articulo {
     animation: none !important;
   }
 }

@@ -1,71 +1,71 @@
 <template>
-  <div id="inicio" class="catalog-view">
-    <header class="catalog-view__intro">
-      <p class="catalog-view__eyebrow">Tienda Cositas Divinas</p>
+  <div id="inicio" class="vista-catalogo">
+    <header class="vista-catalogo__introduccion">
+      <p class="vista-catalogo__antetitulo">Tienda Cositas Divinas</p>
       <h1>Detalles que acompañan cada momento</h1>
-      
+      <p>Explora nuestras categorías organizadas en cajones y descubre una selección especial para el hogar y la devoción.</p>
     </header>
 
-   
-    <section id="proposito" class="mission-banner" aria-label="Propósito de evangelización">
-      <div class="mission-banner__inner">
-        <div class="mission-banner__image-wrap">
+    
+    <section id="proposito" class="pancarta-mision" aria-label="Propósito de evangelización">
+      <div class="pancarta-mision__interior">
+        <div class="pancarta-mision__contenedor-imagen">
           <img
-            :src="missionImage"
+            :src="imagenBanner"
             alt="Biblia y rosario en un ambiente de oración"
-            class="mission-banner__image"
+            class="pancarta-mision__imagen"
           />
-          <span class="mission-banner__image-caption">Detalles con propósito</span>
+          <span class="pancarta-mision__pie-imagen">Detalles con propósito</span>
         </div>
-        <div class="mission-banner__content">
-          <span class="mission-banner__tag">Propósito de Evangelización</span>
-          <p class="mission-banner__quote">
+        <div class="pancarta-mision__contenido">
+          <span class="pancarta-mision__etiqueta">Propósito de Evangelización</span>
+          <p class="pancarta-mision__cita">
             Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
           </p>
-          <p class="mission-banner__cause">
+          <p class="pancarta-mision__causa">
             Al adquirir nuestros productos, no solo llevas contigo un artículo especial, sino que también contribuyes a la recaudación de fondos para la organización del
             <strong>XII Retiro de Emaus Mujeres</strong>.
           </p>
-          <p class="mission-banner__gratitude">
+          <p class="pancarta-mision__agradecimiento">
             ¡Muchas gracias por hacer parte de este propósito de evangelización!
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Sección de Cajones / Cards de Categorías -->
+    
     <CatalogFilters
       :categories="categories"
-      :selected-category="selectedCategory"
-      :selected-sort="selectedSort"
-      :is-drawer-open="isDrawerOpen"
-      @select-category="selectCategory"
-      @select-sort="selectSort"
-      @toggle-drawer="toggleDrawer"
+      :selected-category="categoriaSeleccionada"
+      :selected-sort="ordenSeleccionado"
+      :is-drawer-open="estaCajonAbierto"
+      @select-category="seleccionarCategoria"
+      @select-sort="seleccionarOrden"
+      @toggle-drawer="alternarCajon"
     />
 
-    <!-- Sección Desplegada con los Productos del Cajón -->
-    <Transition name="drawer-expand">
+    
+    <Transition name="despliegue-cajon">
       <section
-        v-if="isDrawerOpen"
+        v-if="estaCajonAbierto"
         id="productos"
-        ref="productsContainer"
-        class="deployed-drawer-section"
+        ref="contenedorProductos"
+        class="seccion-cajon-desplegado"
       >
-        <!-- Barra de control del cajón desplegado -->
-        <div class="deployed-drawer__banner">
-          <div class="deployed-drawer__banner-info">
-            <span class="deployed-drawer__eyebrow">Cajón desplegado</span>
-            <h2 class="deployed-drawer__title">
-              {{ currentCategoryTitle }}
-              <span class="deployed-drawer__count">({{ filteredProducts.length }} productos)</span>
+     
+        <div class="cajon-desplegado__pancarta">
+          <div class="cajon-desplegado__informacion-pancarta">
+            <span class="cajon-desplegado__antetitulo">Cajón desplegado</span>
+            <h2 class="cajon-desplegado__titulo">
+              {{ tituloCategoriaActual }}
+              <span class="cajon-desplegado__conteo">({{ productosFiltrados.length }} productos)</span>
             </h2>
           </div>
 
-          <div class="deployed-drawer__controls">
-            <label class="deployed-drawer__sort">
+          <div class="cajon-desplegado__controles">
+            <label class="cajon-desplegado__ordenar">
               <span>Ordenar</span>
-              <select :value="selectedSort" @change="selectSort($event.target.value)">
+              <select :value="ordenSeleccionado" @change="seleccionarOrden($event.target.value)">
                 <option value="default">Recomendados</option>
                 <option value="price-asc">Menor precio</option>
                 <option value="price-desc">Mayor precio</option>
@@ -75,84 +75,82 @@
             </label>
 
             <button
-              class="deployed-drawer__toggle-btn"
+              class="cajon-desplegado__boton-alternar"
               type="button"
               title="Cerrar cajón"
               aria-label="Cerrar sección desplegada"
-              @click="toggleDrawer"
+              @click="alternarCajon"
             >
-              Cerrar cajón ✕
+              Cerrar Articulos ✕
             </button>
           </div>
         </div>
 
-        <!-- Grid de productos con transición fluida -->
-        <div class="catalog-view__products">
-          <Transition name="tab-view" mode="out-in">
+        
+        <div class="vista-catalogo__productos">
+          <Transition name="transicion-pestaña-vista" mode="out-in">
             <ProductGrid
-              :key="`${selectedCategory}-${currentPage}-${selectedSort}`"
-              :products="pagedProducts"
-              @add-to-cart="handleAddToCart"
-              @set-cart-quantity="handleSetCartQuantity"
+              :key="`${categoriaSeleccionada}-${paginaActual}-${ordenSeleccionado}`"
+              :products="productosPaginados"
             />
           </Transition>
         </div>
 
-        <!-- Paginación táctil -->
-        <nav v-if="totalPages > 1" class="pagination" aria-label="Páginas de productos">
+        
+        <nav v-if="totalPaginas > 1" class="paginacion" aria-label="Páginas de productos">
           <button
-            class="pagination__button pagination__button--arrow"
+            class="paginacion__boton paginacion__boton--flecha"
             type="button"
-            :disabled="currentPage === 1"
+            :disabled="paginaActual === 1"
             aria-label="Página anterior"
-            @click="goToPage(currentPage - 1)"
+            @click="irAPagina(paginaActual - 1)"
           >
             ‹
           </button>
 
           <button
-            v-for="page in visiblePages"
-            :key="page"
-            class="pagination__button"
-            :class="{ 'pagination__button--active': page === currentPage }"
+            v-for="pagina in paginasVisibles"
+            :key="pagina"
+            class="paginacion__boton"
+            :class="{ 'paginacion__boton--activa': pagina === paginaActual }"
             type="button"
-            :aria-current="page === currentPage ? 'page' : undefined"
-            @click="goToPage(page)"
+            :aria-current="pagina === paginaActual ? 'page' : undefined"
+            @click="irAPagina(pagina)"
           >
-            {{ page }}
+            {{ pagina }}
           </button>
 
           <button
-            class="pagination__button pagination__button--arrow"
+            class="paginacion__boton paginacion__boton--flecha"
             type="button"
-            :disabled="currentPage === totalPages"
+            :disabled="paginaActual === totalPaginas"
             aria-label="Página siguiente"
-            @click="goToPage(currentPage + 1)"
+            @click="irAPagina(paginaActual + 1)"
           >
             ›
           </button>
         </nav>
       </section>
 
-      <!-- Estado cuando el cajón está cerrado / contraído -->
-      <div v-else class="drawer-closed-state">
-        <span class="drawer-closed-state__icon">📦</span>
-        <h3>El cajón está cerrado</h3>
+      
+      <div v-else class="estado-cajon-cerrado">
+        <span class="estado-cajon-cerrado__icono">🛒</span>
+        <h3>Ninguna Categoria Seleccionada</h3>
         <p>Toca cualquiera de las tarjetas de arriba para desplegar su catálogo de productos.</p>
-        <button class="drawer-closed-state__btn" type="button" @click="toggleDrawer">
+        <button class="estado-cajon-cerrado__boton" type="button" @click="alternarCajon">
           Reabrir cajón desplegado ▾
         </button>
       </div>
     </Transition>
 
-    <!-- Footer de la parroquia -->
-    <footer id="contacto" class="catalog-footer">
-      <div class="catalog-footer__inner">
-        <p class="catalog-footer__parish">Parroquia de la Santa Cruz — Tienda Cositas Divinas</p>
-        <p class="catalog-footer__retreat">
+    
+    <footer id="contacto" class="pie-catalogo">
+      <div class="pie-catalogo__interior">
+        <p class="pie-catalogo__parroquia">Parroquia de la Santa Cruz — Tienda Cositas Divinas</p>
+        <p class="pie-catalogo__retiro">
           En apoyo a la organización del <strong>XII Retiro de Emaus Mujeres</strong>
         </p>
-        <p class="catalog-footer__blessing">Que Dios bendiga abundantemente tu hogar y a tu familia.</p>
+        <p class="pie-catalogo__bendicion">Que Dios bendiga abundantemente tu hogar y a tu familia.</p>
       </div>
     </footer>
   </div>
@@ -164,127 +162,122 @@ import CatalogFilters from '../components/catalog/CatalogFilters.vue'
 import ProductGrid from '../components/catalog/ProductGrid.vue'
 import { categories } from '../data/categories'
 import { products } from '../data/products'
-import missionImage from '../assets/banner.jpeg'
+import imagenBanner from '../assets/banner.jpeg'
 
-const emit = defineEmits(['add-to-cart', 'set-cart-quantity'])
+const categoriaSeleccionada = ref('Todos')
+const ordenSeleccionado = ref('default')
+const estaCajonAbierto = ref(true)
+const paginaActual = ref(1)
+alternarCajon()
 
-const selectedCategory = ref('Todos')
-const selectedSort = ref('default')
-const isDrawerOpen = ref(true)
-const currentPage = ref(1)
-const productsPerPage = ref(12)
-const productsContainer = ref(null)
-let mobileQuery
+const productosPorPagina = ref(24)
+const contenedorProductos = ref(null)
+let consultaMovil
 
-const currentCategoryTitle = computed(() => {
-  if (selectedCategory.value === 'Todos') return 'Todos los Productos'
-  return selectedCategory.value
+const tituloCategoriaActual = computed(() => {
+  if (categoriaSeleccionada.value === 'Todos') return 'Todos los Productos'
+  return categoriaSeleccionada.value
 })
 
-const filteredProducts = computed(() =>
-  selectedCategory.value === 'Todos'
+const productosFiltrados = computed(() =>
+  categoriaSeleccionada.value === 'Todos'
     ? products
-    : products.filter((product) => product.categoria === selectedCategory.value),
+    : products.filter((producto) => producto.categoria === categoriaSeleccionada.value),
 )
 
-const sortedProducts = computed(() => {
-  const list = [...filteredProducts.value]
+const productosOrdenados = computed(() => {
+  const lista = [...productosFiltrados.value]
 
-  switch (selectedSort.value) {
+  switch (ordenSeleccionado.value) {
     case 'price-asc':
-      return list.sort((a, b) => a.precio - b.precio)
+      return lista.sort((a, b) => a.precio - b.precio)
     case 'price-desc':
-      return list.sort((a, b) => b.precio - a.precio)
+      return lista.sort((a, b) => b.precio - a.precio)
     case 'name-asc':
-      return list.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+      return lista.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
     case 'name-desc':
-      return list.sort((a, b) => b.nombre.localeCompare(a.nombre, 'es'))
+      return lista.sort((a, b) => b.nombre.localeCompare(a.nombre, 'es'))
     default:
-      return list
+      return lista
   }
 })
 
-const totalPages = computed(() => Math.max(1, Math.ceil(filteredProducts.value.length / productsPerPage.value)))
+const totalPaginas = computed(() =>
+  Math.max(1, Math.ceil(productosFiltrados.value.length / productosPorPagina.value)),
+)
 
-const pagedProducts = computed(() => {
-  const start = (currentPage.value - 1) * productsPerPage.value
-  return sortedProducts.value.slice(start, start + productsPerPage.value)
+const productosPaginados = computed(() => {
+  const inicio = (paginaActual.value - 1) * productosPorPagina.value
+  return productosOrdenados.value.slice(inicio, inicio + productosPorPagina.value)
 })
-
-function handleAddToCart(product) {
-  emit('add-to-cart', product)
-}
-
-function handleSetCartQuantity({ product, quantity }) {
-  emit('set-cart-quantity', { product, quantity })
-}
 
 // Ventana de páginas visibles en móvil y escritorio
-const visiblePages = computed(() => {
-  const total = totalPages.value
+const paginasVisibles = computed(() => {
+  const total = totalPaginas.value
   if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1)
 
-  const current = currentPage.value
-  let start = Math.max(1, current - 2)
-  let end = Math.min(total, start + 4)
-  if (end - start < 4) start = Math.max(1, end - 4)
+  const actual = paginaActual.value
+  let inicio = Math.max(1, actual - 2)
+  let fin = Math.min(total, inicio + 4)
+  if (fin - inicio < 4) inicio = Math.max(1, fin - 4)
 
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+  return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i)
 })
 
-function selectCategory(category) {
-  selectedCategory.value = category
-  isDrawerOpen.value = true
-  currentPage.value = 1
-  scrollToProductsStart()
+function seleccionarCategoria(categoria) {
+  categoriaSeleccionada.value = categoria
+  estaCajonAbierto.value = true
+  paginaActual.value = 1
+  desplazarAlInicioProductos()
 }
 
-function toggleDrawer() {
-  isDrawerOpen.value = !isDrawerOpen.value
-  if (isDrawerOpen.value) {
-    scrollToProductsStart()
+function alternarCajon() {
+  estaCajonAbierto.value = !estaCajonAbierto.value
+  if (estaCajonAbierto.value) {
+    desplazarAlInicioProductos()
   }
 }
 
-function selectSort(sort) {
-  selectedSort.value = sort
-  currentPage.value = 1
-  scrollToProductsStart()
+function seleccionarOrden(orden) {
+  ordenSeleccionado.value = orden
+  paginaActual.value = 1
+  desplazarAlInicioProductos()
 }
 
-function goToPage(page) {
-  if (page < 1 || page > totalPages.value) return
-  currentPage.value = page
-  scrollToProductsStart()
+function irAPagina(numeroPagina) {
+  if (numeroPagina < 1 || numeroPagina > totalPaginas.value) return
+  paginaActual.value = numeroPagina
+  desplazarAlInicioProductos()
 }
 
-function scrollToProductsStart() {
+function desplazarAlInicioProductos() {
   nextTick(() => {
-    if (productsContainer.value) {
-      productsContainer.value.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    if (contenedorProductos.value) {
+      contenedorProductos.value.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   })
 }
 
-function updateProductsPerPage() {
-  productsPerPage.value = mobileQuery.matches ? 8 : 12
-  currentPage.value = 1
+function actualizarProductosPorPagina() {
+  // Cantidad máxima ampliada: 16 en teléfonos móviles y 24 en pantallas de escritorio
+  productosPorPagina.value = consultaMovil.matches ? 16 : 24
+  paginaActual.value = 1
 }
 
 onMounted(() => {
-  mobileQuery = window.matchMedia('(max-width: 560px)')
-  updateProductsPerPage()
-  mobileQuery.addEventListener('change', updateProductsPerPage)
+  consultaMovil = window.matchMedia('(max-width: 560px)')
+  actualizarProductosPorPagina()
+  consultaMovil.addEventListener('change', actualizarProductosPorPagina)
 })
 
 onBeforeUnmount(() => {
-  mobileQuery?.removeEventListener('change', updateProductsPerPage)
+  consultaMovil?.removeEventListener('change', actualizarProductosPorPagina)
 })
 </script>
 
 <style>
-/* ── Catalog layout (Permite scroll natural en toda la página) ── */
-.catalog-view {
+/* ── Diseño del Catálogo (Permite scroll natural en toda la página) ── */
+.vista-catalogo {
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -294,14 +287,14 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-/* ── Intro header ───────────────────────────────────── */
-.catalog-view__intro {
-  animation: intro-enter .5s cubic-bezier(0.16, 1, 0.3, 1) both;
+/* ── Encabezado de Introducción ─────────────────────── */
+.vista-catalogo__introduccion {
+  animation: animacion-entrada-intro .3s ease-out both;
   margin-bottom: 1.5rem;
   max-width: 720px;
 }
 
-.catalog-view__eyebrow {
+.vista-catalogo__antetitulo {
   color: var(--accent);
   font-size: .8rem;
   font-weight: 700;
@@ -309,23 +302,22 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
 }
 
-.catalog-view h1 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+.vista-catalogo h1 {
   font-size: clamp(1.6rem, 5vw, 3.2rem);
   line-height: 1.15;
   margin: .3rem 0 .6rem;
   color: var(--ink);
 }
 
-.catalog-view__intro > p:last-child {
+.vista-catalogo__introduccion > p:last-child {
   color: var(--muted);
   font-size: .95rem;
   line-height: 1.5;
 }
 
-/* ── Mission Banner (Propósito Emaús Mujeres) ────────── */
-.mission-banner {
-  animation: intro-enter .5s cubic-bezier(0.16, 1, 0.3, 1) .08s both;
+/* ── Banner de Propósito (XII Retiro de Emaús Mujeres) ── */
+.pancarta-mision {
+  animation: animacion-entrada-intro .5s cubic-bezier(0.16, 1, 0.3, 1) .08s both;
   background: var(--surface);
   border: 1px solid var(--line);
   border-left: 5px solid var(--olive);
@@ -336,20 +328,20 @@ onBeforeUnmount(() => {
   padding: 0;
 }
 
-.mission-banner__inner {
+.pancarta-mision__interior {
   display: grid;
   gap: 0;
   grid-template-columns: minmax(18rem, 1.05fr) minmax(0, 1fr);
   align-items: stretch;
 }
 
-.mission-banner__image-wrap {
+.pancarta-mision__contenedor-imagen {
   min-height: 21rem;
   overflow: hidden;
   position: relative;
 }
 
-.mission-banner__image-wrap::after {
+.pancarta-mision__contenedor-imagen::after {
   background: linear-gradient(180deg, transparent 55%, rgba(41, 39, 37, .55) 100%);
   content: '';
   inset: 0;
@@ -357,7 +349,7 @@ onBeforeUnmount(() => {
   position: absolute;
 }
 
-.mission-banner__image {
+.pancarta-mision__imagen {
   border-radius: 0;
   display: block;
   height: 100%;
@@ -366,7 +358,7 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-.mission-banner__image-caption {
+.pancarta-mision__pie-imagen {
   background: rgba(41, 39, 37, .84);
   border-radius: 0 .45rem 0 .45rem;
   bottom: 0;
@@ -379,26 +371,7 @@ onBeforeUnmount(() => {
   z-index: 1;
 }
 
-.mission-banner__icon-col {
-  flex-shrink: 0;
-}
-
-.mission-banner__badge-icon {
-  align-items: center;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  color: var(--accent-strong);
-  display: flex;
-  font-size: 1.35rem;
-  font-weight: 800;
-  height: 3rem;
-  justify-content: center;
-  width: 3rem;
-  box-shadow: 0 4px 10px rgba(138, 93, 73, .15);
-}
-
-.mission-banner__content {
+.pancarta-mision__contenido {
   display: flex;
   flex-direction: column;
   gap: .55rem;
@@ -407,7 +380,7 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-.mission-banner__content::before {
+.pancarta-mision__contenido::before {
   color: var(--accent);
   content: '✦';
   font-family: Georgia, serif;
@@ -419,7 +392,7 @@ onBeforeUnmount(() => {
   top: 1.15rem;
 }
 
-.mission-banner__tag {
+.pancarta-mision__etiqueta {
   align-self: flex-start;
   background: var(--accent);
   border-radius: 999px;
@@ -432,7 +405,7 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
 }
 
-.mission-banner__quote {
+.pancarta-mision__cita {
   font-family: 'Cormorant Garamond', Georgia, serif;
   color: var(--ink);
   font-size: 1.35rem;
@@ -443,7 +416,7 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-.mission-banner__quote::after {
+.pancarta-mision__cita::after {
   background: var(--accent);
   content: '';
   display: block;
@@ -453,7 +426,7 @@ onBeforeUnmount(() => {
   width: 3rem;
 }
 
-.mission-banner__cause {
+.pancarta-mision__causa {
   color: var(--ink);
   font-size: .95rem;
   line-height: 1.55;
@@ -461,12 +434,12 @@ onBeforeUnmount(() => {
   max-width: 38rem;
 }
 
-.mission-banner__cause strong {
+.pancarta-mision__causa strong {
   color: var(--accent-strong);
   font-weight: 800;
 }
 
-.mission-banner__gratitude {
+.pancarta-mision__agradecimiento {
   color: var(--accent-strong);
   font-size: .95rem;
   font-weight: 800;
@@ -476,9 +449,9 @@ onBeforeUnmount(() => {
   padding-left: .75rem;
 }
 
-/* ── Deployed Drawer Section ────────────────────────── */
-.deployed-drawer-section {
-  animation: drawer-fade-in .5s cubic-bezier(0.16, 1, 0.3, 1) .16s both;
+/* ── Sección del Cajón Desplegado ───────────────────── */
+.seccion-cajon-desplegado {
+  animation: animacion-aparicion-cajon .32s cubic-bezier(0.16, 1, 0.3, 1) both;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 1.25rem;
@@ -489,7 +462,7 @@ onBeforeUnmount(() => {
 }
 
 /* Banner superior del cajón desplegado */
-.deployed-drawer__banner {
+.cajon-desplegado__pancarta {
   align-items: center;
   border-bottom: 1px solid var(--line);
   display: flex;
@@ -500,7 +473,7 @@ onBeforeUnmount(() => {
   padding-bottom: 1rem;
 }
 
-.deployed-drawer__eyebrow {
+.cajon-desplegado__antetitulo {
   color: var(--accent);
   font-size: .75rem;
   font-weight: 800;
@@ -508,26 +481,26 @@ onBeforeUnmount(() => {
   text-transform: uppercase;
 }
 
-.deployed-drawer__title {
+.cajon-desplegado__titulo {
   color: var(--ink);
   font-size: 1.35rem;
   font-weight: 800;
   margin: .15rem 0 0;
 }
 
-.deployed-drawer__count {
+.cajon-desplegado__conteo {
   color: var(--muted);
   font-size: .92rem;
   font-weight: 600;
 }
 
-.deployed-drawer__controls {
+.cajon-desplegado__controles {
   align-items: center;
   display: flex;
   gap: .75rem;
 }
 
-.deployed-drawer__sort {
+.cajon-desplegado__ordenar {
   align-items: center;
   color: var(--muted);
   display: flex;
@@ -536,7 +509,7 @@ onBeforeUnmount(() => {
   gap: .45rem;
 }
 
-.deployed-drawer__sort select {
+.cajon-desplegado__ordenar select {
   appearance: none;
   background: var(--canvas);
   border: 1px solid var(--line);
@@ -550,13 +523,13 @@ onBeforeUnmount(() => {
   transition: border-color .2s ease;
 }
 
-.deployed-drawer__sort select:focus {
+.cajon-desplegado__ordenar select:focus {
   border-color: var(--accent);
   outline: 2px solid var(--soft-accent);
   outline-offset: 2px;
 }
 
-.deployed-drawer__toggle-btn {
+.cajon-desplegado__boton-alternar {
   align-items: center;
   background: var(--canvas);
   border: 1px solid var(--line);
@@ -572,65 +545,65 @@ onBeforeUnmount(() => {
   transition: all .2s ease;
 }
 
-.deployed-drawer__toggle-btn:hover {
+.cajon-desplegado__boton-alternar:hover {
   background: var(--soft-accent);
   border-color: var(--accent);
   color: var(--accent-strong);
 }
 
-.deployed-drawer__toggle-btn:active {
+.cajon-desplegado__boton-alternar:active {
   transform: scale(.95);
 }
 
-/* ── Products list ──────────────────────────────────── */
-.catalog-view__products {
+/* ── Contenedor de productos ────────────────────────── */
+.vista-catalogo__productos {
   padding: .25rem 0 1rem;
 }
 
-/* ── Drawer Expand / Collapse Transitions ───────────── */
-.drawer-expand-enter-active {
+/* ── Transición al expandir / contraer cajón ─────────── */
+.despliegue-cajon-enter-active {
   transition: opacity .35s cubic-bezier(0.16, 1, 0.3, 1),
               transform .35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.drawer-expand-leave-active {
+.despliegue-cajon-leave-active {
   transition: opacity .22s ease-in,
               transform .22s ease-in;
 }
 
-.drawer-expand-enter-from {
+.despliegue-cajon-enter-from {
   opacity: 0;
   transform: translateY(-12px);
 }
 
-.drawer-expand-leave-to {
+.despliegue-cajon-leave-to {
   opacity: 0;
   transform: translateY(-10px);
 }
 
-/* ── Cross-fade on category or sort switch ──────────── */
-.tab-view-enter-active {
+/* ── Transición al cambiar de categoría o página ────── */
+.transicion-pestaña-vista-enter-active {
   transition: opacity .24s cubic-bezier(0.16, 1, 0.3, 1),
               transform .24s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tab-view-leave-active {
+.transicion-pestaña-vista-leave-active {
   transition: opacity .14s ease-in,
               transform .14s ease-in;
 }
 
-.tab-view-enter-from {
+.transicion-pestaña-vista-enter-from {
   opacity: 0;
   transform: translateY(12px) scale(.99);
 }
 
-.tab-view-leave-to {
+.transicion-pestaña-vista-leave-to {
   opacity: 0;
   transform: translateY(-8px) scale(.99);
 }
 
-/* ── Closed Drawer Placeholder ──────────────────────── */
-.drawer-closed-state {
+/* ── Estado cuando el cajón está cerrado ────────────── */
+.estado-cajon-cerrado {
   align-items: center;
   background: var(--surface);
   border: 2px dashed var(--line);
@@ -641,26 +614,26 @@ onBeforeUnmount(() => {
   padding: 3rem 1.5rem;
   text-align: center;
   margin-bottom: 2rem;
-  animation: drawer-fade-in .4s cubic-bezier(0.16, 1, 0.3, 1) .16s both;
+  animation: animacion-aparicion-cajon .3s ease-out both;
 }
 
-.drawer-closed-state__icon {
+.estado-cajon-cerrado__icono {
   font-size: 2.25rem;
 }
 
-.drawer-closed-state h3 {
+.estado-cajon-cerrado h3 {
   font-size: 1.25rem;
   margin: .25rem 0;
   color: var(--ink);
 }
 
-.drawer-closed-state p {
+.estado-cajon-cerrado p {
   color: var(--muted);
   font-size: .92rem;
   margin: 0 0 .75rem;
 }
 
-.drawer-closed-state__btn {
+.estado-cajon-cerrado__boton {
   background: var(--accent);
   border: none;
   border-radius: .55rem;
@@ -674,16 +647,16 @@ onBeforeUnmount(() => {
   transition: background-color .2s ease, transform .15s ease;
 }
 
-.drawer-closed-state__btn:hover {
+.estado-cajon-cerrado__boton:hover {
   background: var(--accent-strong);
 }
 
-.drawer-closed-state__btn:active {
+.estado-cajon-cerrado__boton:active {
   transform: scale(.96);
 }
 
-/* ── Pagination ─────────────────────────────────────── */
-.pagination {
+/* ── Paginación ─────────────────────────────────────── */
+.paginacion {
   display: flex;
   gap: .4rem;
   justify-content: center;
@@ -691,7 +664,7 @@ onBeforeUnmount(() => {
   padding-bottom: .25rem;
 }
 
-.pagination__button {
+.paginacion__boton {
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -709,17 +682,17 @@ onBeforeUnmount(() => {
   width: 2.75rem;
 }
 
-.pagination__button--arrow {
+.paginacion__boton--flecha {
   font-size: 1.3rem;
   font-weight: 700;
 }
 
-.pagination__button:disabled {
+.paginacion__boton:disabled {
   cursor: default;
   opacity: .35;
 }
 
-.pagination__button:active:not(:disabled) {
+.paginacion__boton:active:not(:disabled) {
   background: var(--soft-accent);
   border-color: var(--accent);
   color: var(--accent-strong);
@@ -727,28 +700,28 @@ onBeforeUnmount(() => {
 }
 
 @media (hover: hover) {
-  .pagination__button:hover:not(:disabled) {
+  .paginacion__boton:hover:not(:disabled) {
     border-color: var(--accent);
     color: var(--accent-strong);
   }
 }
 
-.pagination__button--active {
+.paginacion__boton--activa {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
   box-shadow: 0 3px 10px rgba(138, 93, 73, .25);
 }
 
-/* ── Parish Footer ──────────────────────────────────── */
-.catalog-footer {
+/* ── Pie de Página Parroquial ────────────────────────── */
+.pie-catalogo {
   border-top: 1px solid var(--line);
   margin-top: 2rem;
   padding: 2rem 1rem 3rem;
   text-align: center;
 }
 
-.catalog-footer__inner {
+.pie-catalogo__interior {
   display: flex;
   flex-direction: column;
   gap: .35rem;
@@ -756,99 +729,96 @@ onBeforeUnmount(() => {
   margin: 0 auto;
 }
 
-.catalog-footer__parish {
+.pie-catalogo__parroquia {
   color: var(--accent-strong);
   font-size: 1rem;
   font-weight: 800;
   margin: 0;
 }
 
-.catalog-footer__retreat {
+.pie-catalogo__retiro {
   color: var(--ink);
   font-size: .92rem;
   margin: 0;
 }
 
-.catalog-footer__blessing {
+.pie-catalogo__bendicion {
   color: var(--muted);
   font-size: .84rem;
   font-style: italic;
   margin: .35rem 0 0;
 }
 
-@keyframes intro-enter {
+@keyframes animacion-entrada-intro {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes drawer-fade-in {
+@keyframes animacion-aparicion-cajon {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Mobile Layout ──────────────────────────────────── */
+/* ── Móvil Layout ───────────────────────────────────── */
 @media (max-width: 560px) {
-  .catalog-view {
+  .vista-catalogo {
     padding: 1.25rem .75rem 2.5rem;
   }
 
-  .catalog-view__intro {
+  .vista-catalogo__introduccion {
     margin-bottom: 1rem;
   }
 
-  .catalog-view__eyebrow { font-size: .72rem; }
+  .vista-catalogo__antetitulo { font-size: .72rem; }
 
-  .catalog-view__intro > p:last-child {
+  .vista-catalogo__introduccion > p:last-child {
     font-size: .88rem;
   }
 
-  /* Mission banner en móvil */
-  .mission-banner {
-    padding: 1rem .85rem;
+  /* Pancarta misión en móvil */
+  .pancarta-mision {
+    padding: 0;
     margin-bottom: 1.25rem;
   }
 
-  .mission-banner__inner {
+  .pancarta-mision__interior {
     align-items: stretch;
     grid-template-columns: 1fr;
-    gap: .75rem;
+    gap: 0;
   }
 
-  .mission-banner__image-wrap {
+  .pancarta-mision__contenedor-imagen {
     flex-basis: auto;
     min-height: 13.5rem;
   }
 
-  .mission-banner__image { min-height: 13.5rem; }
-
-  .mission-banner__content { padding: 1.25rem 1rem 1.4rem; }
-  .mission-banner__quote { font-size: 1.15rem; }
-
-  .mission-banner__badge-icon {
-    height: 2.35rem;
-    width: 2.35rem;
-    font-size: 1.1rem;
+  .pancarta-mision__imagen {
+    min-height: 13.5rem;
   }
 
-  .mission-banner__quote {
-    font-size: .9rem;
+  .pancarta-mision__contenido {
+    padding: 1.25rem 1rem 1.4rem;
   }
 
-  .mission-banner__cause {
+  .pancarta-mision__cita {
+    font-size: 1.15rem;
+  }
+
+  .pancarta-mision__causa {
     font-size: .86rem;
   }
 
-  .mission-banner__gratitude {
+  .pancarta-mision__agradecimiento {
     font-size: .88rem;
   }
 
-  .deployed-drawer-section {
+  .seccion-cajon-desplegado {
     border-radius: 1rem;
     padding: 1rem .75rem;
     margin-bottom: 1.25rem;
   }
 
-  .deployed-drawer__banner {
+  .cajon-desplegado__pancarta {
     flex-direction: column;
     align-items: flex-start;
     gap: .75rem;
@@ -856,34 +826,34 @@ onBeforeUnmount(() => {
     margin-bottom: 1rem;
   }
 
-  .deployed-drawer__title {
+  .cajon-desplegado__titulo {
     font-size: 1.15rem;
   }
 
-  .deployed-drawer__controls {
+  .cajon-desplegado__controles {
     width: 100%;
     justify-content: space-between;
   }
 
-  .deployed-drawer__sort {
+  .cajon-desplegado__ordenar {
     flex: 1;
   }
 
-  .deployed-drawer__sort select {
+  .cajon-desplegado__ordenar select {
     flex: 1;
     font-size: .82rem;
   }
 
-  .deployed-drawer__toggle-btn {
+  .cajon-desplegado__boton-alternar {
     font-size: .75rem;
     padding: .35rem .6rem;
   }
 
-  .pagination {
+  .paginacion {
     gap: .3rem;
   }
 
-  .pagination__button {
+  .paginacion__boton {
     flex: 0 0 2.75rem;
     font-size: .85rem;
     height: 2.75rem;
@@ -892,13 +862,13 @@ onBeforeUnmount(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .catalog-view__intro,
-  .mission-banner,
-  .deployed-drawer-section,
-  .drawer-expand-enter-active,
-  .drawer-expand-leave-active,
-  .tab-view-enter-active,
-  .tab-view-leave-active {
+  .vista-catalogo__introduccion,
+  .pancarta-mision,
+  .seccion-cajon-desplegado,
+  .despliegue-cajon-enter-active,
+  .despliegue-cajon-leave-active,
+  .transicion-pestaña-vista-enter-active,
+  .transicion-pestaña-vista-leave-active {
     transition: none !important;
     animation: none !important;
   }

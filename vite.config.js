@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'assets/*'],
       manifest: {
-        name: 'Tienda Cositas Divinas - Parroquia de la Santa Cruz',
-        short_name: 'Cositas Divinas',
+        name: 'Tienda Todo con Amor - Parroquia de la Santa Cruz',
+        short_name: 'Todo con Amor',
         description: 'Catálogo de productos religiosos en apoyo al XII Retiro de Emaús Mujeres',
         theme_color: '#f8f4ea',
         background_color: '#f8f4ea',

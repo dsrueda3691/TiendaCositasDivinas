@@ -1,5 +1,5 @@
 
-# Tienda Cositas Divinas
+# Tienda Todo Con Amor
 
 Catálogo digital de la **Parroquia de la Santa Cruz** para consultar artículos religiosos, detalles para el hogar y productos devocionales. La aplicación permite explorar el catálogo, consultar los detalles de cada artículo, preparar una selección de compra y enviarla directamente por WhatsApp. Además, cuenta con soporte para **PWA (Progressive Web App)**, permitiendo su instalación en dispositivos móviles y la consulta del catálogo **sin conexión a internet**.
 

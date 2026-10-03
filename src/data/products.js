@@ -68,7 +68,7 @@ export const products = [
     nombre: 'Decorativo En Estrella-Unidad',
     precio: 3000,
     imagen: getImage('Decoracion.jpeg'),
-    descripcion: 'Estrella de arte sacro para Decorar cualquier rincón del hogar.',
+    descripcion: 'Estrella de arte sacro para decorar cualquier rincón del hogar.',
     categoria: 'Hogar y Decoración',
   },
   {
@@ -399,7 +399,7 @@ export const products = [
   },
   {
     id: 49,
-    nombre: 'Bolso Tote Bag Cositas Divinas',
+    nombre: 'Bolso Tote Bag Todo con Amor',
     precio: 25000,
     imagen: getImage('BolsoTote.jpeg'),
     descripcion: 'Tote bag práctica y ligera para llevar tus libros o compras diarias.',

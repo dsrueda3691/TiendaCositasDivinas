@@ -2,7 +2,7 @@
   <div id="inicio" class="vista-catalogo">
    <header class="vista-catalogo__introduccion">
   <p class="vista-catalogo__antetitulo">TIENDA</p>
-  <h1 class="vista-catalogo__titulo-principal">Cositas Divinas</h1>
+  <h1 class="vista-catalogo__titulo-principal">Todo Con Amor</h1>
   <p class="vista-catalogo__subtitulo">Artículos Religiosos y Espirituales</p>
   <p class="pancarta-mision__cita">
     Cada artículo de este catálogo ha sido seleccionado para acompañarte en tu camino de fe y devoción.
@@ -155,7 +155,7 @@
           <img :src="imagenEmaus" alt="Logo XII Retiro de Emaús Mujeres" class="pie-catalogo__logo-emaus" />
         </div>
 
-        <p class="pie-catalogo__parroquia">Parroquia de la Santa Cruz — Tienda Cositas Divinas</p>
+        <p class="pie-catalogo__parroquia">Parroquia de la Santa Cruz — Tienda Todo Con Amor </p>
         <p class="pie-catalogo__retiro">
           En apoyo a la organización del <strong>XII Retiro de Emaús Mujeres</strong>
         </p>

@@ -1,6 +1,6 @@
 import { computed, ref, watch } from 'vue'
 
-const CART_STORAGE_KEY = 'cositas_divinas_cart'
+const CART_STORAGE_KEY = 'todo_con_amor_cart'
 
 // Leer carrito guardado en localStorage para persistencia
 let initialCart = []
@@ -109,11 +109,11 @@ export function useCart() {
 
     const lines = cart.value.map(
       (item) =>
-        `• ${item.quantity}x ${item.nombre} — ${formatPrice(item.precio * item.quantity)} (Ref: #CD-${String(item.id).padStart(3, '0')})`,
+        `• ${item.quantity}x ${item.nombre} — ${formatPrice(item.precio * item.quantity)} (Ref: #TCA-${String(item.id).padStart(3, '0')})`,
     )
 
     const message = [
-      '¡Hola! Vengo de la página web de la Tienda Cositas Divinas (Parroquia de la Santa Cruz).',
+      '¡Hola! Vengo de la página web de la Tienda Todo con Amor (Parroquia de la Santa Cruz).',
       '',
       'Me gustaría consultar la disponibilidad y comprar los siguientes productos para apoyar al XII Retiro de Emaús Mujeres:',
       '',
